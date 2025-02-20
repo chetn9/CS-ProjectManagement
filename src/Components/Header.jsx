@@ -12,7 +12,7 @@ import AddNewRecord from "../Pages/Add-New-Record";
 function Header() {
     return (
         <>
-        <Router>
+        <Router basename="CS-ProjectManagement/">
             <div>
             <Navbar expand="lg" className="bg-body-tertiary">
                     <Container>
