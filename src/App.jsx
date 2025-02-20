@@ -9,14 +9,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.js';
 
 import Header from './Components/Header';
 import Dashboard from './Pages/Dashboard';
+import StudentList from "./Pages/Student-List";
+import AddNewRecord from "./Pages/Add-New-Record";
 
 function App() {
-	const [count, setCount] = useState(0)
 
 	return (
 		<>
 			<Header/>
-			{/* <Dashboard/> */}
 		</>
 	)
 }

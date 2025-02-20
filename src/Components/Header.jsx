@@ -5,17 +5,18 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Dashboard from "../Pages/Dashboard";
+import Dashboard from '../Pages/Dashboard';
 import StudentList from "../Pages/Student-List";
 import AddNewRecord from "../Pages/Add-New-Record";
 
 function Header() {
     return (
         <>
-            <Router>
-                <Navbar expand="lg" className="bg-body-tertiary">
+        <Router>
+            <div>
+            <Navbar expand="lg" className="bg-body-tertiary">
                     <Container>
-                        <Navbar.Brand href="/">CS Project Management</Navbar.Brand>
+                        <Link to="/">CS Project Management</Link>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav mx-auto">
                             <Nav className="mx-auto">
@@ -26,8 +27,6 @@ function Header() {
                                     <NavDropdown.Item href="#action/3.2">
                                         <Link to="/Student-List" className="nav-link">Student List</Link>
                                     </NavDropdown.Item>
-
-                                    
                                     
                                 </NavDropdown>
 
@@ -41,18 +40,16 @@ function Header() {
                             </Nav>
                         </Navbar.Collapse>
                     </Container>
-
-                    
                 </Navbar>
 
                 <Routes>
-                    <Route path="/" element={<Dashboard />} />
-                    <Route path="/Student-List" element={<StudentList />} />
-                    <Route path="/Add-New" element={<AddNewRecord />} />
-                </Routes>
-            </Router>
-            
-            
+				<Route path="/" element={<Dashboard />} />
+				<Route path="/Student-List" element={<StudentList />} />
+				<Route path="/Add-New" element={<AddNewRecord />} />
+            </Routes>
+            </div>
+        </Router>
+                
         </>
     )
 }
