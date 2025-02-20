@@ -16,7 +16,7 @@ function Header() {
             <div>
             <Navbar expand="lg" className="bg-body-tertiary">
                     <Container>
-                        <Link to="/">CS Project Management</Link>
+                        <Link className="nav-link navbar-brand" to="/">CS Project Management</Link>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav mx-auto">
                             <Nav className="mx-auto">
