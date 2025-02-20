@@ -1,7 +1,6 @@
 import React from "react";
 
-function StudentList() {
-    const data = ["Chetan", "Somaiya", "cs@gmail.com", "1"];
+function StudentProjects() {
     return (
         <>
             <div className="container mt-3">
@@ -9,7 +8,7 @@ function StudentList() {
                 <div className="row">
                     <div className="card p-0">
                         <div className="card-header">
-                            <h5>Student Records</h5>
+                            <h5>Student Projects</h5>
                         </div>
                         <div className="card-body">
                             <div className="table-responsive-sm">
@@ -18,10 +17,14 @@ function StudentList() {
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
-                                        <th>Email</th>
-                                        <th>Semester</th>
+                                        <th>Project Title</th>
+                                        <th>Description</th>
+                                        <th>Due Date</th>
+                                        <th>Student ID</th>
+                                        <th>Group ID</th>
+                                        <th>Faculty 1</th>
+                                        <th>Faculty 2</th>
+                                        <th>Project Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -29,12 +32,16 @@ function StudentList() {
                                 <tbody className="text-nowrap">
                                     <tr>
                                         <td>001</td>
-                                        <td>Chetan</td>
-                                        <td>Somaiya</td>
-                                        <td>cs@gmail.com</td>
+                                        <td>E-Commerce</td>
+                                        <td>Description for Project</td>
+                                        <td>25-2-25</td>
                                         <td>1</td>
+                                        <td>N/A</td>
+                                        <td>2</td>
+                                        <td>5</td>
+                                        <td > <span className="badge badge-dark bg-info text-light"> On-Going </span></td>
                                        
-                                        <td><a className="btn btn-primary btn-sm" href="">Edit</a> | <a className="btn btn-danger btn-sm" href="">Delete</a>
+                                        <td><a className="btn btn-primary" href="">Edit</a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -49,4 +56,4 @@ function StudentList() {
     );
 }
 
-export default StudentList;
+export default StudentProjects;

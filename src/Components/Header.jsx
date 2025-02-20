@@ -7,6 +7,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Dashboard from '../Pages/Dashboard';
 import StudentList from "../Pages/Student-List";
+import ProjectList from "../Pages/Student-Projects";
 import AddNewRecord from "../Pages/Add-New-Record";
 
 function Header() {
@@ -34,6 +35,8 @@ function Header() {
                                    
                                 </NavDropdown>
 
+                                <Link to="/Project-List" className="nav-link mx-2">Project List</Link>
+
                                 <Link to="/Add-New" className="nav-link mx-2">Add New Record</Link>
 
                             
@@ -46,6 +49,7 @@ function Header() {
 				<Route path="/" element={<Dashboard />} />
 				<Route path="/Student-List" element={<StudentList />} />
 				<Route path="/Add-New" element={<AddNewRecord />} />
+				<Route path="/Project-List" element={<ProjectList />} />
             </Routes>
             </div>
         </Router>
