@@ -1,6 +1,21 @@
-import React from "react";
+import {React, useEffect, useState} from "react";
+import axios from "axios";
 
 function StudentProjects() {
+
+    const [projectData, setProjectData] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://127.0.0.1:8000/api/Projects")
+        .then((response) => {
+            const projects = Object.values(response.data);
+            setProjectData(projects);
+            console.log(response.data);
+        }).catch((error)=>{
+            console.log(error);
+        });
+
+    },[]);
     return (
         <>
             <div className="container mt-3">
@@ -11,9 +26,9 @@ function StudentProjects() {
                             <h5>Student Projects</h5>
                         </div>
                         <div className="card-body">
-                            <div className="table-responsive-sm">
+                            <div className="table-responsive">
 
-                            <table className="table table-bordered text-center text-nowrap">
+                            <table className="table  table-bordered text-center text-nowrap">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -30,20 +45,25 @@ function StudentProjects() {
                                 </thead>
 
                                 <tbody className="text-nowrap">
-                                    <tr>
-                                        <td>001</td>
-                                        <td>E-Commerce</td>
-                                        <td>Description for Project</td>
-                                        <td>25-2-25</td>
-                                        <td>1</td>
-                                        <td>N/A</td>
-                                        <td>2</td>
-                                        <td>5</td>
-                                        <td > <span className="badge badge-dark bg-info text-light"> On-Going </span></td>
-                                       
-                                        <td><a className="btn btn-primary" href="">Edit</a>
-                                        </td>
-                                    </tr>
+                                    {
+                                        projectData.map((item, index)=>(
+                                        
+                                            <tr>
+                                                <td>{index+1}</td>
+                                                <td>{item.Title}</td>
+                                                <td>{item.Description}</td>
+                                                <td>{item.due_date ? item.due_date : "Not set Due Date"}</td>
+                                                <td>{item.UserId ? item.UserId : "With-Group"}</td>
+                                                <td>{item.GroupId ? item.GroupId : "-"}</td>
+                                                <td>{item.Faculty ? item.Faculty.Faculty1 : "Faculty not Assigned"}</td>
+                                                <td>{item.Faculty ? item.Faculty.Faculty2 : "Faculty not Assigned"}</td>
+                                                <td > <span className="badge badge-dark bg-info text-light"> {item.ProjectStatus} </span></td>
+                                            
+                                                <td><a className="btn btn-primary" href="">Edit</a>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    }
                                 </tbody>
                             </table>
                             </div>

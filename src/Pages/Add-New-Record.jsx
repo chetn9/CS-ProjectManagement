@@ -8,7 +8,7 @@ function AddNewRecord() {
                     <div class="col-lg-6">
                         <div class="card">
                             <div class="card-body">
-                                <form action="" method="post">
+                                <form>
 
                                     <div class="row form-group my-2">
                                         <div class="col-lg-12">

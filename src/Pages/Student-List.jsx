@@ -1,7 +1,23 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 function StudentList() {
-    const data = ["Chetan", "Somaiya", "cs@gmail.com", "1"];
+    // const data = ["Chetan", "Somaiya", "cs@gmail.com", "1"];
+
+    const [studentData, setStudentData] = useState([]);
+
+    useEffect(() => {
+        axios.get("http://127.0.0.1:8000/api/Student-Data")
+        .then((response) => {
+            const studentArray = Object.values(response.data);
+            setStudentData(studentArray);
+            console.log(response.data);
+        }).catch((error)=>{
+            console.log(error);
+        });
+
+    },[]);
+
     return (
         <>
             <div className="container mt-3">
@@ -21,22 +37,27 @@ function StudentList() {
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
+                                        <th>Stream</th>
                                         <th>Semester</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
 
                                 <tbody className="text-nowrap">
-                                    <tr>
-                                        <td>001</td>
-                                        <td>Chetan</td>
-                                        <td>Somaiya</td>
-                                        <td>cs@gmail.com</td>
-                                        <td>1</td>
-                                       
-                                        <td><a className="btn btn-primary btn-sm" href="">Edit</a> | <a className="btn btn-danger btn-sm" href="">Delete</a>
-                                        </td>
-                                    </tr>
+                                    {studentData.map((item, index)=>(
+
+                                        <tr key={index}>
+                                            <td>{index+1}</td>
+                                            <td>{item.FirstName}</td>
+                                            <td>{item.LastName}</td>
+                                            <td>{item.Email}</td>
+                                            <td>{item.Stream}</td>
+                                            <td>{item.Semester}</td>
+                                        
+                                            <td><a className="btn btn-primary btn-sm" href="">Edit</a> | <a className="btn btn-danger btn-sm" href="">Delete</a>
+                                            </td>
+                                        </tr>
+                                    ))}
                                 </tbody>
                             </table>
                             </div>
