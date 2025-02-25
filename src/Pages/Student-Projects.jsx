@@ -1,19 +1,32 @@
 import {React, useEffect, useState} from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 function StudentProjects() {
 
     const [projectData, setProjectData] = useState([]);
 
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/api/Projects")
-        .then((response) => {
-            const projects = Object.values(response.data);
-            setProjectData(projects);
-            console.log(response.data);
-        }).catch((error)=>{
-            console.log(error);
-        });
+        const getData = async () => {
+            try
+            {
+                await axios.get("http://127.0.0.1:8000/api/Projects")
+                .then((response) => {
+                    const projects = Object.values(response.data);
+                    setProjectData(projects);
+                    console.log(response.data);
+                }).catch((error)=>{
+                    console.log(error);
+                });
+            }
+            catch(error)
+            {
+                console.error(error);
+            }
+        };
+
+        getData();
+        
 
     },[]);
     return (
@@ -57,9 +70,9 @@ function StudentProjects() {
                                                 <td>{item.GroupId ? item.GroupId : "-"}</td>
                                                 <td>{item.Faculty ? item.Faculty.Faculty1 : "Faculty not Assigned"}</td>
                                                 <td>{item.Faculty ? item.Faculty.Faculty2 : "Faculty not Assigned"}</td>
-                                                <td > <span className="badge badge-dark bg-info text-light"> {item.ProjectStatus} </span></td>
+                                                <td> <span className={`badge text-light ${item.ProjectStatus ? (item.ProjectStatus == 'Completed' ? 'bg-success' : 'bg-dark') : "text-dark" } `}> {item.ProjectStatus ? item.ProjectStatus : "-"} </span></td>
                                             
-                                                <td><a className="btn btn-primary" href="">Edit</a>
+                                                <td><Link to={`/Project-Edit/${item.ProjectId}`} className="btn btn-outline-primary">Edit</Link>
                                                 </td>
                                             </tr>
                                         ))
