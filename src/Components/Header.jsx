@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { HashRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Dashboard from '../Pages/Dashboard';
 import StudentList from "../Pages/Student-List";
 import ProjectList from "../Pages/Student-Projects";
@@ -13,7 +13,7 @@ import AddNewRecord from "../Pages/Add-New-Record";
 function Header() {
     return (
         <>
-        <Router basename="CS-ProjectManagement/">
+        <Router basename="/">
             <div>
             <Navbar expand="lg" className="bg-body-tertiary">
                     <Container>
