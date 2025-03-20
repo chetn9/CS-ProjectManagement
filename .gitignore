@@ -11,6 +11,8 @@ Server/.vercel
 Server/node_modules
 Server/vercel.json
 
+src/Firebase
+
 node_modules
 dist
 dist-ssr
