@@ -10,6 +10,7 @@ import StudentList from "../Pages/Student-List";
 import ProjectList from "../Pages/Student-Projects";
 import AddNewRecord from "../Pages/Add-New-Record";
 import EditProject from "../Pages/Edit-Project";
+import EditStudent from "../Pages/Students/Edit-Student";
 
 function Header() {
     return (
@@ -52,6 +53,7 @@ function Header() {
 				<Route path="/Add-New" element={<AddNewRecord />} />
 				<Route path="/Project-List" element={<ProjectList />} />
 				<Route path="/Project-Edit/:projectId" element={<EditProject />} />
+				<Route path="/Edit-Student/:studentId" element={<EditStudent />} />
             </Routes>
             </div>
         </Router>

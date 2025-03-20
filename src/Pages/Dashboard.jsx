@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 import img1 from "../assets/project_management_4.webp";
 import img2 from "../assets/Project-Management_6.png";
 import { database } from "../Firebase/firebase-config";
 import { getDatabase, ref, onValue } from "firebase/database";
+import StudentProjects from "./Student-Projects";
+import StudentList from "./Student-List";
 
 function Dashboard() {
 
@@ -76,58 +80,11 @@ function Dashboard() {
                 </div>
 
                 <div className="row mt-3">
-                <div className="card p-0">
-                        <div className="card-header">
-                            <h5>Student Records</h5>
-                        </div>
+                    <StudentList />
+                </div>
 
-                        <div className="card-body">
-
-                            {
-                                userData === null ? (
-                                    <p>Loading Data</p>
-                            ): (
-                                    <div className="table-responsive-sm">
-
-                                    <table className="table table-bordered text-center text-nowrap">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
-                                                <th>Email</th>
-                                                <th>Stream</th>
-                                                <th>Semester</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody className="text-nowrap">
-                                            {
-                                            userData.map((user)=>(
-                                            
-                                            
-                                            <tr key={user.id}>
-                                                <td>{user.id}</td>
-                                                <td>{user.FirstName}</td>
-                                                <td>{user.LastName}</td>
-                                                <td>{user.Email}</td>
-                                                <td>{user.Stream}</td>
-                                                <td>{user.Semester}</td>
-                                            
-                                                <td><a className="btn btn-primary btn-sm" href="">Edit</a> | <a className="btn btn-danger btn-sm" href="">Delete</a>
-                                                </td>
-                                            </tr>
-                                            ))}                                    
-                                            
-                                        </tbody>
-                                    </table>
-                                    </div>
-                            )}
-                            
-                        </div>
-                    </div>
-
+                <div className="row mt-3">
+                    <StudentProjects/>        
                 </div>
             </div>
         </>
