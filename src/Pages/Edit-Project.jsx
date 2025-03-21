@@ -3,6 +3,10 @@ import axios from "axios";
 import { data, useParams } from "react-router-dom";
 import { database } from "../Firebase/firebase-config";
 import { getDatabase, ref, onValue, update } from "firebase/database";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 function EditProject(){
 
@@ -160,7 +164,12 @@ function EditProject(){
                 Database: projectData.Database.trim()
             })
             .then(() => {
-                alert("Project updated successfully!");
+                // alert("Project updated successfully!");
+                MySwal.fire({
+                    title: "Project updated successfully!",
+                    icon: "success",
+                    draggable: true
+                });
             })
             .catch((error) => {
                 alert("Error updating project !!");
@@ -193,7 +202,7 @@ function EditProject(){
     return (
         <>
             <div className="container mt-3">
-                <div className="row">
+                <div className="row justify-content-center">
                     <div className="col-lg-6">
                 {
                     projectData === null ? (
@@ -201,7 +210,7 @@ function EditProject(){
                     ):(
                         <div className="card">
                             <div className="card-header">
-                                <h5 className="my-auto">Edit Project</h5>
+                                <h5 className="my-auto">Edit Project : <span className="text-primary">{projectData.Title}</span></h5>
                             </div>
                             <div className="card-body">
 

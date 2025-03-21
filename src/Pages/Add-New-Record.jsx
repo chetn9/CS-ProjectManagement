@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { database } from "../Firebase/firebase-config";
 import { getDatabase, ref, onValue, push } from "firebase/database";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 function AddNewRecord() {
 
@@ -54,7 +58,13 @@ function AddNewRecord() {
                     Password: userData.Password.trim(),
             }).then(()=>{
 
-                alert("Record added successfully!");
+                // alert("Record added successfully!");
+                MySwal.fire({
+                    title: "Record added successfully!",
+                    icon: "success",
+                    draggable: true
+                });
+
                 setUserData({
                     FirstName: "",
                     LastName: "",

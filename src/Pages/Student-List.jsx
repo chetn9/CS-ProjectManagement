@@ -1,9 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, remove } from "firebase/database";
 import { Link } from "react-router-dom";
 import LinkButton from "../Components/UpdateLinkButton";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 function StudentList() {
     // const data = ["Chetan", "Somaiya", "cs@gmail.com", "1"];
@@ -52,6 +56,29 @@ function StudentList() {
 
     }, []);
 
+    const deleteRecord = (id)=>{
+        const dataRef = ref(database, 'users/'+id);
+        MySwal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+                remove(dataRef);
+                
+                MySwal.fire({
+                title: "Deleted! ",
+                text: "Record has been deleted.",
+                icon: "success"
+              });
+            }
+          });
+    }
+
     return (
         <>
             <div className="container mt-3">
@@ -99,7 +126,7 @@ function StudentList() {
                                                 <td>
                                                 <LinkButton to={`/Edit-Student/${user.id}`} className={"btn btn-outline-primary"} text={"Edit"}/>
                                                 <span className="mx-2">|</span> 
-                                                <button className="ml-3 btn btn-outline-danger" href=""> Delete <i class="bi bi-x-circle-fill"></i></button>
+                                                <button type="submit" className="ml-3 btn btn-outline-danger" onClick={()=>deleteRecord(user.id)}> Delete <i class="bi bi-x-circle-fill"></i></button>
                                                 </td>
                                             </tr>
                                             ))}                                    
