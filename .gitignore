@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-Server
+Server/api
 Server/.vercel
 Server/node_modules
 Server/vercel.json
