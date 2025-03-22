@@ -2,12 +2,17 @@ import {React, useEffect, useState} from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, get, ref, onValue, update } from "firebase/database";
 import LinkButton from "../Components/UpdateLinkButton";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 function StudentProjects() {
 
     const [projectData, setProjectData] = useState(null);
+    const [dueDate, setDueDate] = useState('');
 
     // useEffect(() => {
     //     const getData = async () => {
@@ -44,8 +49,18 @@ function StudentProjects() {
                     ...project,
                 }));
 
+                projectArray[0].DueDate ? setDueDate(projectArray[0].DueDate) : setDueDate("No date found");
+                // if(projectArray[0].DueDate || projectArray[0].DueDate != "" || projectArray[0].DueDate != null)
+                // {
+                //     const getDueDate = projectArray[0].DueDate;
+                //     setDueDate(getDueDate);
+                // }
+                // else
+                // {
+                //     setDueDate("No date found");
+                // }
+
                 setProjectData(projectArray);
-                // console.log(projectArray);
             }
             else
             {
@@ -59,11 +74,85 @@ function StudentProjects() {
 
     }, []);
 
+    // const inputDate = (e)=>{
+    //     const {name, value} = e.target;
+    //     setDueDate((data)=>({
+    //         ...data,
+    //         [name]: value,
+    //     }));
+    // }
+
+    const formSubmit = async (e)=>{
+        e.preventDefault();
+
+        const dataRef = ref(database, 'projects/data');
+
+        const date = e.target[0].value;
+
+        if(date == "" || date == null)
+        {
+            console.log("Due Date"+dueDate);
+            alert('Select date');
+        }
+        else if(date < new Date().toISOString().split('T')[0])
+        {
+            alert('Select valid date!');
+        }
+        else
+        {
+            console.log("Due Date"+dueDate);
+            const projectSnap = await get(dataRef);
+            if(projectSnap.exists())
+            {
+                const getData = projectSnap.val();
+                const updated = {};
+
+                for(let projectId in getData)
+                {
+                    // console.log(projectId);
+                    updated[`${projectId}/DueDate`] = date;
+                }
+
+                await update(dataRef, updated);
+
+                MySwal.fire({
+                    title: "Project submission Date updated!",
+                    icon: "success",
+                    draggable: true
+                });
+            }
+            else
+            {
+                alert("No Data found");
+            }
+            // onValue(dataRef, (snapshot)=>{
+            //     const data = snapshot.val();
+            //     // console.log(data);
+            // });
+            // update(dataRef, {
+            //     DueDate: date,
+            // }).then(()=>{
+            //     alert("Due Date Added");
+            // }).catch((error)=>{
+            //     console.error("Error", error);
+            // });
+            // console.log(date);
+        }
+    }
+
     return (
         <>
             <div className="container-fluid mt-3">
             
                 <div className="row mx-1">
+                    
+                    <div className="card">
+                        <form onSubmit={formSubmit}>
+                            <input type="date" name="dueDate" id="" />
+                            <button type="submit" className="btn btn-primary">Project submission Date</button>
+                        </form>
+                    </div>
+
                     <div className="card border border-dark p-0">
                         <div className="card-header bg-dark text-light">
                             <h5 className="my-auto">Student Projects</h5>
@@ -97,7 +186,7 @@ function StudentProjects() {
                                                 
                                                     <tr key={item.id}>
                                                         <td>{index+1}</td>
-                                                        <td>{item.Title}</td>
+                                                        <td>{item.DueDate}</td>
                                                         <td>{item.Description}</td>
                                                         <td>{item.due_date ? item.due_date : "Not set Due Date"}</td>
                                                         <td>{item.UserId ? item.UserId : "With-Group"}</td>
