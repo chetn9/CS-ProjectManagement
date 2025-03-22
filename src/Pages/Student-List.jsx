@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import LinkButton from "../Components/UpdateLinkButton";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import ShimmerLoader from "../Components/ShimmerEffect";
 
 const MySwal = withReactContent(Swal)
 
@@ -58,6 +59,7 @@ function StudentList() {
 
     const deleteRecord = (id)=>{
         const dataRef = ref(database, 'users/'+id);
+
         MySwal.fire({
             title: "Are you sure?",
             text: "You won't be able to revert this!",
@@ -66,7 +68,7 @@ function StudentList() {
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-          }).then((result) => {
+        }).then((result) => {
             if (result.isConfirmed) {
                 remove(dataRef);
                 
@@ -76,7 +78,7 @@ function StudentList() {
                 icon: "success"
               });
             }
-          });
+        });
     }
 
     return (
@@ -93,7 +95,7 @@ function StudentList() {
 
                             {
                                 studentData === null ? (
-                                    <p>Loading Data</p>
+                                    <ShimmerLoader />
                             ): (
                                     <div className="table-responsive-sm">
 

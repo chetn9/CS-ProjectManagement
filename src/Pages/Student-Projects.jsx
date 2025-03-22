@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { database } from "../Firebase/firebase-config";
 import { getDatabase, get, ref, onValue, update } from "firebase/database";
 import LinkButton from "../Components/UpdateLinkButton";
+import ShimmerLoader from "../Components/ShimmerEffect";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -160,7 +161,7 @@ function StudentProjects() {
                         <div className="card-body">
                             {
                                 projectData === null ? (
-                                    <p>Loading Data</p>
+                                    <ShimmerLoader />
                                 ) : (
                                     <div className="table-responsive">
 

@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import { data, useParams } from "react-router-dom";
 import { database } from "../../Firebase/firebase-config";
 import { getDatabase, ref, onValue, update } from "firebase/database";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 function EditProject(){
 
@@ -135,7 +139,12 @@ function EditProject(){
             }
             await update(dataRef, updatedStudent)
             .then(() => {
-                alert("Data updated successfully!");
+                // alert("Data updated successfully!");
+                MySwal.fire({
+                    title: "Data updated successfully!",
+                    icon: "success",
+                    draggable: true
+                });
             })
             .catch((error) => {
                 alert("Error updating Data !!");
