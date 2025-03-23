@@ -8,7 +8,7 @@ import LinkButton from "../../Components/UpdateLinkButton";
 
 const MySwal = withReactContent(Swal)
 
-function ManageTechnology()
+function ManageStream()
 {
     const [techList, setTechList] = useState(null);
 
@@ -71,11 +71,33 @@ function ManageTechnology()
 
     return (
     <>
-        <div className="container">
+        <div className="container mt-3">
             <div className="row">
-                <div className="col-lg-6">
+                <div className="col-lg-4">
                     <div className="card">
-                        <div className="card-header bg-dark text-light">
+                        <div className="card-body">
+                            <form action="">
+                                <div className="row form-group">
+                                    <div className="col-lg-12">
+                                        <label htmlFor="" className="mb-2">Enter Stream</label>
+                                        <input type="text" placeholder="Enter Stream" className="border border-info form-control" name="stream" id="" />
+                                    </div>
+
+                                    <div className="col-lg-6">
+                                       
+                                        <button type="submit" className="btn btn-primary mt-4">Add Stream</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-lg-1"></div>
+
+                <div className="col-lg-7">
+                    <div className="card"> {/*#d6dcf9*/}
+                        <div className="card-header text-success" >
                             <h4 className="my-auto">Stream Data</h4>
                         </div>
                         <div className="card-body">
@@ -124,4 +146,4 @@ function ManageTechnology()
     );
 }
 
-export default ManageTechnology;
+export default ManageStream;

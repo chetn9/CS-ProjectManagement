@@ -187,9 +187,9 @@ function StudentProjects() {
                                                 
                                                     <tr key={item.id}>
                                                         <td>{index+1}</td>
-                                                        <td>{item.DueDate}</td>
+                                                        <td>{item.Title}</td>
                                                         <td>{item.Description}</td>
-                                                        <td>{item.due_date ? item.due_date : "Not set Due Date"}</td>
+                                                        <td>{item.DueDate ? item.DueDate : "Not set Due Date"}</td>
                                                         <td>{item.UserId ? item.UserId : "With-Group"}</td>
                                                         <td>{item.GroupId ? item.GroupId : "-"}</td>
                                                         <td>{item.Faculty ? item.Faculty.Faculty1 : "Faculty not Assigned"}</td>

@@ -12,8 +12,8 @@ import AddNewRecord from "../Pages/Add-New-Record";
 import EditProject from "../Pages/Edit-Project";
 import EditStudent from "../Pages/Students/Edit-Student";
 import Login from "../Pages/Login";
-import ManageTechnology from "../Pages/Tech-Database/ManageTechnology";
-import ManageDatabase from "../Pages/Tech-Database/ManageDatabase";
+import ManageTechDatabase from "../Pages/Tech-Database/ManageTech-Database";
+import ManageStream from "../Pages/Tech-Database/ManageStream";
 
 function Header() {
     return (
@@ -44,8 +44,8 @@ function Header() {
 
                                 <Link to="/Add-New" className="nav-link mx-2">Add New Record</Link>
 
-                                <Link to="/Manage-Technology" className="nav-link mx-2">Manage Technology</Link>
-                                <Link to="/Manage-Database" className="nav-link mx-2">Manage Database</Link>
+                                <Link to="/Manage-Stream" className="nav-link mx-2">Manage Stream</Link>
+                                <Link to="/Manage-TechDatabase" className="nav-link mx-2">Manage Tech & Database</Link>
 
                             
                             </Nav>
@@ -61,8 +61,8 @@ function Header() {
 				<Route path="/Project-Edit/:projectId" element={<EditProject />} />
 				<Route path="/Edit-Student/:studentId" element={<EditStudent />} />
 				<Route path="/Login" element={<Login />} />
-				<Route path="/Manage-Technology" element={<ManageTechnology />} />
-				<Route path="/Manage-Database" element={<ManageDatabase />} />
+				<Route path="/Manage-Stream" element={<ManageStream />} />
+				<Route path="/Manage-TechDatabase" element={<ManageTechDatabase />} />
             </Routes>
             </div>
         </Router>
