@@ -14,6 +14,7 @@ import EditStudent from "../Pages/Students/Edit-Student";
 import Login from "../Pages/Login";
 import ManageTechDatabase from "../Pages/Tech-Database/ManageTech-Database";
 import ManageStream from "../Pages/Tech-Database/ManageStream";
+import ManageTask from "../Pages/Tasks/ManageTasks";
 
 function Header() {
     return (
@@ -63,6 +64,7 @@ function Header() {
 				<Route path="/Login" element={<Login />} />
 				<Route path="/Manage-Stream" element={<ManageStream />} />
 				<Route path="/Manage-TechDatabase" element={<ManageTechDatabase />} />
+                <Route path="/Task-List/:projectId" element={<ManageTask/>}/>
             </Routes>
             </div>
         </Router>
