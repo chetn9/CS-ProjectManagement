@@ -2,7 +2,7 @@ import {React, useEffect, useState} from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, get, ref, onValue, update } from "firebase/database";
+import { getDatabase, get, ref, onValue, remove, update } from "firebase/database";
 import LinkButton from "../Components/UpdateLinkButton";
 import ShimmerLoader from "../Components/ShimmerEffect";
 import Swal from 'sweetalert2'
@@ -141,6 +141,30 @@ function StudentProjects() {
         }
     }
 
+    const deleteProject = (id)=>{
+        const dataRef = ref(database, "projects/data/"+id);
+
+        MySwal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                remove(dataRef);
+                
+                MySwal.fire({
+                title: "Deleted! ",
+                text: "Record has been deleted.",
+                icon: "success"
+              });
+            }
+        });
+    }
+
     return (
         <>
             <div className="container-fluid mt-3">
@@ -202,9 +226,11 @@ function StudentProjects() {
 
                                                         </td>
                                                         <td>
-                                                            <LinkButton to={`/Project-Edit/${item.ProjectId}`} className="btn btn-outline-primary" text={"Edit"}/>
-                                                            <span className="mx-2"></span>
                                                             <LinkButton className="btn btn-outline-dark" icon={<i className="bi bi-info-circle"></i>} text={"View Detail"}/>
+                                                            <span className="mx-2"></span>
+                                                            <LinkButton to={`/Project-Edit/${item.ProjectId}`} className="btn btn-outline-primary" text={"Edit"}/>
+                                                            <span className="mx-1"></span>
+                                                            <button onClick={()=>deleteProject(item.id)} className="btn btn-outline-danger">Remove</button>
                                                         </td>
                                                     </tr>
                                                 ))
