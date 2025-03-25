@@ -3,15 +3,21 @@ import { database } from "../../Firebase/firebase-config";
 import { getDatabase, ref, onValue, remove } from "firebase/database";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+
 import ShimmerLoader from "../../Components/ShimmerEffect";
 import LinkButton from "../../Components/UpdateLinkButton";
 
-const MySwal = withReactContent(Swal)
+import DataTable from 'datatables.net-react';
+import DT from 'datatables.net-bs5';
+
 
 function ManageStream()
 {
     const [techList, setTechList] = useState(null);
-
+    const MySwal = withReactContent(Swal);
+    DataTable.use(DT);
+    
+    
     useEffect(()=>{
         const dataRef = ref(database, 'streams/');
 
@@ -102,39 +108,40 @@ function ManageStream()
                         </div>
                         <div className="card-body">
                                 {
-                                    techList == null ? (
+                                    techList === null ? (
                                         <ShimmerLoader />
                                     ) :(
 
-                                        <table className="table table-bordered text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Stream</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                    
-                                            <tbody>
-                                                <tr>
+                                        <div className="table-responsive">
+
+                                            <DataTable className="table text-center table-bordered ">
+                                                <thead>
+                                                    <tr>
+                                                        <th className="text-center">#</th>
+                                                        <th className="text-center">Stream</th>
+                                                        <th className="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                        
+                                                <tbody>
                                                     
-                                                </tr>
-                                                {
-                                                    techList.map((item, index)=>(
-                                                        
-                                                        <tr key={index}>
-                                                            <td>{index+1}</td>
-                                                            <td>{item.stream}</td>
-                                                            <td>
-                                                                <LinkButton text={"Edit"}/>
-                                                                <span className="mx-2">|</span>
-                                                                <button onClick={()=>deleteStream(item.id)} className="btn btn-outline-danger" type="submit">Delete</button>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                }
-                                            </tbody>
-                                        </table>
+                                                    {
+                                                        techList.map((item, index)=>(
+                                                            
+                                                            <tr key={index}>
+                                                                <td className="text-center">{index+1}</td>
+                                                                <td className="text-center">{item.stream}</td>
+                                                                <td className="text-center">
+                                                                    <LinkButton text={"Edit"} />
+                                                                    
+                                                                    <button onClick={()=>deleteStream(item.id)} className="mx-2 btn btn-outline-danger" type="submit">Delete</button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                </tbody>
+                                            </DataTable>
+                                        </div>
                                     )
                                 }
                         </div>

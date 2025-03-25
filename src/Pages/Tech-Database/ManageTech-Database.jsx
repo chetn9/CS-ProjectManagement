@@ -8,12 +8,16 @@ import SuccessMsg from "../../Components/SuccessMsg";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { Modal } from "react-bootstrap";
+import DataTable from 'datatables.net-react';
+import DT from 'datatables.net-bs5';
 
 
-const MySwal = withReactContent(Swal)
 
 function ManageDatabase()
 {
+    const MySwal = withReactContent(Swal);
+    DataTable.use(DT);
+
     const [dbList, setDbList] = useState(null);
     const [techList, setTechList] = useState(null);
 
@@ -141,8 +145,6 @@ function ManageDatabase()
         });
     }
 
-
-
     const formSubmit = (e)=>{
         e.preventDefault();
 
@@ -192,40 +194,41 @@ function ManageDatabase()
                         </div>
                         <div className="card-body">
                                 {
-                                    techList == null ? (
+                                    techList === null ? (
                                         <ShimmerLoader />
                                     ) :(
 
-                                        <table className="table table-bordered text-center">
+                                        <div>
+
+                                        <DataTable className="table table-bordered text-center">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Technology</th>
-                                                    <th>Action</th>
+                                                    <th className="text-center">Technology</th>
+                                                    <th className="text-center">Action</th>
                                                 </tr>
                                             </thead>
                     
                                             <tbody>
-                                                <tr>
-                                                    
-                                                </tr>
+                                            
                                                 {
                                                     techList.map((item, index)=>(
                                                         
                                                         <tr key={index}>
-                                                            <td>{index+1}</td>
+                                                            <td className="text-center">{index+1}</td>
                                                             <td>{item.technology}</td>
                                                             <td>
                                                                 <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-outline-primary">Edit</button>
                                                                 {/* <LinkButton type={"button"} text={"Edit"} data-bs-toggle="modal" data-bs-target="#exampleModal"/> */}
-                                                                <span className="mx-2">|</span>
-                                                                <button onClick={()=>deleteDB(item.id)} className="btn btn-outline-danger" type="submit">Delete</button>
+                                                                
+                                                                <button onClick={()=>deleteDB(item.id)} className="mx-2 btn btn-outline-danger" type="submit">Delete</button>
                                                             </td>
                                                         </tr>
                                                     ))
                                                 }
                                             </tbody>
-                                        </table>
+                                        </DataTable>
+                                        </div>
                                     )
                                 }
                         </div>
@@ -248,36 +251,37 @@ function ManageDatabase()
                                         <ShimmerLoader />
                                     ) :(
 
-                                        <table className="table table-bordered text-center">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Stream</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                    
-                                            <tbody>
-                                                <tr>
-                                                    
-                                                </tr>
-                                                {
-                                                    dbList.map((item, index)=>(
-                                                        
-                                                        <tr key={index}>
-                                                            <td>{index+1}</td>
-                                                            <td>{item.database}</td>
-                                                            <td>
-                                                                <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-outline-primary">Edit</button>
-                                                                {/* <LinkButton type={"button"} text={"Edit"} data-bs-toggle="modal" data-bs-target="#exampleModal"/> */}
-                                                                <span className="mx-2">|</span>
-                                                                <button onClick={()=>deleteDB(item.id)} className="btn btn-outline-danger" type="submit">Delete</button>
-                                                            </td>
-                                                        </tr>
-                                                    ))
-                                                }
-                                            </tbody>
-                                        </table>
+                                        <div className="table-responsive">
+
+                                            <DataTable className="table table-bordered text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th className="text-center">#</th>
+                                                        <th className="text-center">Stream</th>
+                                                        <th className="text-center">Action</th>
+                                                    </tr>
+                                                </thead>
+                        
+                                                <tbody>
+                                                   
+                                                    {
+                                                        dbList.map((item, index)=>(
+                                                            
+                                                            <tr key={index}>
+                                                                <td className="text-center">{index+1}</td>
+                                                                <td className="text-center">{item.database}</td>
+                                                                <td className="text-center">
+                                                                    <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" className="btn btn-outline-primary">Edit</button>
+                                                                    {/* <LinkButton type={"button"} text={"Edit"} data-bs-toggle="modal" data-bs-target="#exampleModal"/> */}
+                                                                    
+                                                                    <button onClick={()=>deleteDB(item.id)} className="mx-2 btn btn-outline-danger" type="submit">Delete</button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                    }
+                                                </tbody>
+                                            </DataTable>
+                                        </div>
                                     )
                                 }
                         </div>

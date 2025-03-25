@@ -5,16 +5,18 @@ import { database } from "../Firebase/firebase-config";
 import { getDatabase, get, ref, onValue, remove, update } from "firebase/database";
 import LinkButton from "../Components/UpdateLinkButton";
 import ShimmerLoader from "../Components/ShimmerEffect";
+import DataTable from 'datatables.net-react';
+import DT from 'datatables.net-bs5';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-
-const MySwal = withReactContent(Swal)
 
 function StudentProjects() {
 
     const [projectData, setProjectData] = useState(null);
     const [dueDate, setDueDate] = useState('');
 
+    const MySwal = withReactContent(Swal);
+    DataTable.use(DT);
     // useEffect(() => {
     //     const getData = async () => {
     //         try
@@ -83,6 +85,7 @@ function StudentProjects() {
     //     }));
     // }
 
+    // Add date to Every Projects
     const formSubmit = async (e)=>{
         e.preventDefault();
 
@@ -189,20 +192,20 @@ function StudentProjects() {
                                 ) : (
                                     <div className="table-responsive">
 
-                                    <table className="table table-bordered text-center text-nowrap">
+                                    <DataTable className="table table-bordered text-center text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Project Title</th>
+                                                <th className="text-center">#</th>
+                                                <th className="text-center">Project Title</th>
                                                 {/* <th>Description</th> */}
-                                                <th>Due Date</th>
+                                                <th className="text-center">Due Date</th>
                                                 {/* <th>Student ID</th> */}
                                                 {/* <th>Group ID</th> */}
-                                                <th>Faculty 1</th>
-                                                <th>Faculty 2</th>
-                                                <th>Project Status</th>
-                                                <th>Task List</th>
-                                                <th>Action</th>
+                                                <th className="text-center">Faculty 1</th>
+                                                <th className="text-center">Faculty 2</th>
+                                                <th className="text-center">Project Status</th>
+                                                <th className="text-center">Task List</th>
+                                                <th className="text-center">Action</th>
                                             </tr>
                                         </thead>
 
@@ -211,21 +214,21 @@ function StudentProjects() {
                                                 projectData.map((item, index)=>(
                                                 
                                                     <tr key={item.id}>
-                                                        <td>{index+1}</td>
-                                                        <td>{item.Title}</td>
+                                                        <td className="text-center">{index+1}</td>
+                                                        <td className="text-center">{item.Title}</td>
                                                         {/* <td>{item.Description}</td> */}
-                                                        <td>{item.DueDate ? item.DueDate : "Not set Due Date"}</td>
+                                                        <td className="text-center">{item.DueDate ? item.DueDate : "Not set Due Date"}</td>
                                                         {/* <td>{item.UserId ? item.UserId : "With-Group"}</td> */}
                                                         {/* <td>{item.GroupId ? item.GroupId : "-"}</td> */}
-                                                        <td>{item.Faculty ? item.Faculty.Faculty1 : "Faculty not Assigned"}</td>
-                                                        <td>{item.Faculty ? item.Faculty.Faculty2 : "Faculty not Assigned"}</td>
-                                                        <td> <span className={`badge text-light ${item.ProjectStatus ? (item.ProjectStatus == 'Completed' ? 'bg-success' : 'bg-primary') : "text-dark" } `}> {item.ProjectStatus ? item.ProjectStatus : "-"} </span></td>
+                                                        <td className="text-center">{item.Faculty ? item.Faculty.Faculty1 : "Faculty not Assigned"}</td>
+                                                        <td className="text-center">{item.Faculty ? item.Faculty.Faculty2 : "Faculty not Assigned"}</td>
+                                                        <td className="text-center"> <span className={`badge text-light ${item.ProjectStatus ? (item.ProjectStatus == 'Completed' ? 'bg-success' : 'bg-primary') : "text-dark" } `}> {item.ProjectStatus ? item.ProjectStatus : "-"} </span></td>
                                                     
-                                                        <td>
+                                                        <td className="text-center">
                                                             <LinkButton to={`/Task-List/${item.ProjectId}`} className="btn btn-outline-success" icon={<i class="bi bi-list-task"></i>}/>
 
                                                         </td>
-                                                        <td>
+                                                        <td className="text-center">
                                                             <LinkButton className="btn btn-outline-dark" icon={<i className="bi bi-info-circle"></i>} text={"View Detail"}/>
                                                             <span className="mx-2"></span>
                                                             <LinkButton to={`/Project-Edit/${item.ProjectId}`} className="btn btn-outline-primary" text={"Edit"}/>
@@ -236,7 +239,7 @@ function StudentProjects() {
                                                 ))
                                             }
                                         </tbody>
-                                    </table>
+                                    </DataTable>
                                     </div>
                                 )
                             }

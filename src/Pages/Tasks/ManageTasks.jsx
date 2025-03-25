@@ -3,15 +3,22 @@ import { data, useParams } from "react-router-dom";
 import { database } from "../../Firebase/firebase-config";
 import { getDatabase, get, ref, onValue, remove, update, query, orderByChild, equalTo } from "firebase/database";
 import ShimmerLoader from "../../Components/ShimmerEffect";
+import DataTable from 'datatables.net-react';
+import DT from 'datatables.net-bs5';
+
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
-const MySwal = withReactContent(Swal)
 
 function ManageTask()
 {
+    const MySwal = withReactContent(Swal);
+    
     const {projectId} = useParams();
     const [taskList, setTaskList] = useState(null);
+    // let table = new DataTable('#myTable');
+
+    DataTable.use(DT);
 
     useEffect(()=>{
         const dataRef = ref(database, 'tasks');
@@ -74,7 +81,7 @@ function ManageTask()
 
     return (
         <>
-            <div className="container mt-3 mb-3">
+            <div className="container-fluid mt-3 mb-3">
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="card border-dark">
@@ -89,13 +96,15 @@ function ManageTask()
 
                                         <div className="table-responsive">
 
-                                        <table className="table text-center table-bordered">
+                                        <DataTable className="table text-center table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Title</th>
                                                     <th>Status</th>
                                                     <th>Due Date</th>
-                                                    <th colSpan={2}>Assigned By</th>
+                                                    <th>Assigned At</th>
+                                                    <th>Updated At</th>
+                                                    <th>Assigned By</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -106,19 +115,21 @@ function ManageTask()
                                                         <tr key={index}>
                                                             <td style={{width:"30%"}}>{item.Title}</td>
                                                             <td><span className={item.Status === "Pending" ? "badge text-dark bg-warning badge-warning" : (item.Status == "Completed" ? "badge bg-success badge-success" : "badge bg-info badge-info")}>{item.Status}</span></td>
-                                                            <td>{item.due_date}</td>
-                                                            <td colSpan={2}>{item.AssignedBy ? item.AssignedBy : "-" }</td>
-                                                            <td>
+                                                            <td className="text-nowrap">{item.due_date}</td>
+                                                            <td>{item.AssignedAt ? item.AssignedAt : "-"}</td>
+                                                            <td>{item.UpdatedAt}</td>
+                                                            <td>{item.AssignedBy ? item.AssignedBy : "-" }</td>
+                                                            <td className="text-nowrap">
                                                                 <button data-bs-toggle="modal" data-bs-target="#exampleModal" data={item.id} className="btn btn-primary mx-auto" type="submit" onClick={()=>{e.preventDefault()}}>Edit</button>
-                                                                <span className="mx-1"></span>
-                                                                <button className="btn btn-danger mt-lg-0 mt-2" type="submit" onClick={()=>{deleteTask(item.id)}}>Delete</button>
+                                                                <button className="mx-2 btn btn-danger mt-lg-0 mt-2" type="submit" onClick={()=>{deleteTask(item.id)}}>Delete</button>
                                                             </td>
+                                                           
                                                         </tr>
                                                     ))
                                                 }
                                                 
                                             </tbody>
-                                        </table>
+                                        </DataTable>
                                         </div>
                                     )
                                 }
