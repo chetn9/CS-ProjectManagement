@@ -75,7 +75,7 @@ function Login({setIsAuthenticated})
                                             <div className="row form-group mt-2">
                                                 <div className="col-lg-12">
                                                     <label htmlFor="" className="mb-2"><i className="bi bi-lock"></i> Password</label>
-                                                    <input type="text" value={userData.Password} onChange={inputData} placeholder="**********" name="Password" className="form-control" />
+                                                    <input type="password" value={userData.Password} onChange={inputData} placeholder="**********" name="Password" className="form-control" />
                                                 </div>
                                             </div>
 
