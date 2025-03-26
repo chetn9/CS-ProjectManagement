@@ -26,7 +26,7 @@ const ProtectedRoute = () => {
     
     
     if (loading) {
-        return <div>Loading...</div>; // Or a spinner
+        return <div></div>; // Or a spinner
     }
     
     return isUserValid ? <Outlet  /> : <Navigate to="/Login" />;

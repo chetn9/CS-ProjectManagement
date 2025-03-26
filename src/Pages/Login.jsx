@@ -29,7 +29,7 @@ function Login({setIsAuthenticated})
     const formSubmit = (e) => {
         e.preventDefault();
 
-        signInWithEmailAndPassword(auth, userData.Email, userData.Password)
+        signInWithEmailAndPassword(auth, userData.Email.trim(), userData.Password.trim())
         .then(async userCredential=>{
             const loggedInUser = userCredential.user;
             // alert('Login Success');
