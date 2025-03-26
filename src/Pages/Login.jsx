@@ -2,12 +2,15 @@ import { useState } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { Navigate, Router, Routes, useNavigate } from "react-router-dom";
+
 
 const MySwal = withReactContent(Swal)
 
-function Login()
+function Login({setIsAuthenticated})
 {
     const auth = getAuth();
+    const navigate = useNavigate();
 
     const [userData, setUserData] = useState({
         Email : "",
@@ -27,9 +30,13 @@ function Login()
         e.preventDefault();
 
         signInWithEmailAndPassword(auth, userData.Email, userData.Password)
-        .then(userCredential=>{
+        .then(async userCredential=>{
             const loggedInUser = userCredential.user;
-            alert('Login Success');
+            // alert('Login Success');
+            const token = await loggedInUser.getIdToken();
+            localStorage.setItem("userId", token);
+            // setIsAuthenticated(true);
+            navigate("/Dashboard");
 
             console.log(loggedInUser.uid);
 
@@ -39,13 +46,13 @@ function Login()
                 icon: "error",
                 title: "Oops...",
                 text: "Login Failed!",
-                
               });
             console.error("Error: ", error.message);
         });
 
         console.log(userData);
     }
+
     return (
         <>
             <div className="login">
