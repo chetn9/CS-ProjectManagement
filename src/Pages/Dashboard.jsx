@@ -54,26 +54,26 @@ function Dashboard() {
             <div className="container mt-3">
                 <div className="row">
 
-                    <div className="col-lg-3">
+                    <div className="col-lg-3 col-6">
                         <div className="card dashboardCard">
                             <div className="card-body projectCard">
                                 <div className="d-flex justify-content-between align-items-center">
                                     <h4 className=" my-auto">Total Students</h4>
-                                    <img src={capImg} className="bg-info" alt="" />
+                                    <img src={capImg} className="my-auto img-fluid bg-info" alt="" />
                                 </div>
                                 <p>50</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-3 mt-lg-0 mt-3">
+                    <div className="col-lg-3 col-6">
                         <div className="card dashboardCard">
 
                             <div className="card-body projectCard">
                                 <div className="d-flex justify-content-between align-items-center">
 
                                     <h4 className="my-auto">Total Projects</h4>
-                                    <img src={projectManagementImg} className="img-fluid bg-danger" alt="" />
+                                    <img src={projectManagementImg} className="my-auto img-fluid bg-danger" alt="" />
                                 {/* <img src={img2} className="img-fluid" style={{height:"100px"}} alt="" srcset="" /> */}
                                 </div>
 
@@ -82,22 +82,24 @@ function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="col-lg-3 mt-lg-0 mt-3 ">
+                    <div className="col-lg-3 col-6 mt-lg-0 mt-3 ">
                         <div className="card dashboardCard">
 
                             <div className="card-body projectCard">
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <h4 className="my-auto">Completed Projects</h4>
 
-                                    <img src={completedImg} style={{backgroundColor: "#00b894"}} alt="" />
+
+                                    <h4 className="my-1">Completed Projects</h4>
+
+                                    <img src={completedImg} className="my-auto img-fluid" style={{ backgroundColor: "#05c46b" }} alt="" />
                                     
                                 </div>
-                                <p>50</p>
+                                <p className="">50</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="col-lg-3 mt-lg-0 mt-3 ">
+                    <div className="col-lg-3 col-6 mt-lg-0 mt-3 ">
                         <div className="card dashboardCard">
 
                             <div className="card-body projectCard">

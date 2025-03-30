@@ -163,7 +163,7 @@ function ManageTask()
                                                             <tr key={index}>
                                                                 <td className="text-center">{index+1}</td>
                                                                 <td className="text-center" style={{width:"30%"}}>{item.Title}</td>
-                                                                <td className="text-center"><span className={item.Status === "Pending" ? "badge text-dark bg-warning badge-warning" : (item.Status == "Completed" ? "badge bg-success badge-success" : "badge bg-info badge-info")}>{item.Status}</span></td>
+                                                                <td className="text-center"><span className={(item.Status === "Pending") | (item.Status === "pending") ? "badge text-dark bg-warning badge-warning" : ((item.Status == "Completed") | (item.Status == "completed") ? "badge bg-success badge-success" : "badge bg-info badge-info")}>{item.Status}</span></td>
                                                                 <td className="text-nowrap">{item.due_date}</td>
                                                                 <td className="text-center">{item.AssignedAt ? item.AssignedAt : "-"}</td>
                                                                 <td className="text-center">{item.UpdatedAt ? item.UpdatedAt : "-"}</td>

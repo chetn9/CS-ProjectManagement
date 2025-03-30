@@ -29,7 +29,7 @@ const ProtectedRoute = () => {
         return <div></div>; // Or a spinner
     }
     
-    return isUserValid ? <Outlet  /> : <Navigate to="/Login" />;
+    return isUserValid ? <div className='content'> <Outlet /> </div>: <Navigate to="/Login" />;
 };
 
 export default ProtectedRoute;
