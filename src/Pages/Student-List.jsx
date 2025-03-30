@@ -12,6 +12,9 @@ import DataTable from 'datatables.net-react';
 import 'datatables.net-bs5/css/dataTables.bootstrap5.min.css';
 
 import DT from 'datatables.net-bs5';
+
+import studentImg from "../assets/student_web_light_96.png";
+
 DataTable.use(DT);
 
 function StudentList() {
@@ -108,9 +111,12 @@ function StudentList() {
             <div className="container-fluid mt-3">
                 
                 <div className="row mx-1">
-                    <div className="card border border-dark p-0">
-                        <div className="card-header bg-dark text-light">
-                            <h5 className="my-auto fw-bold">Student Records</h5>
+                    <div className="card border overflow-hidden p-0 cardForRadius">
+                        <div className="card-header border-0 bg-white p-3">
+                            <div className="d-flex projectCard">
+                                <img src={studentImg} style={{background: "#1e90ff"}} alt="" />
+                                <h3 className="mx-3 fw-bold mt-2" style={{color: "#2f3542", letterSpacing: 0.5, fontFamily: "sans-serif"}}>Student Records</h3>
+                            </div>
                         </div>
 
                         <div className="card-body">

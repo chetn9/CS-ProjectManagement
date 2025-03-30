@@ -14,6 +14,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -69,6 +70,8 @@ button:focus-visible {
 } */
 
 
+
+
 .login .card
 {
   /* box-shadow: 0 2px 4px rgba(0, 0, 20, .08), 0 1px 2px rgba(10, 10, 20, .08); */
@@ -84,4 +87,34 @@ button:focus-visible {
 {
   background-color: #624bff !important;
   width: 100%;
+}
+
+.cardForRadius
+{
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 24px !important;
+  border: 0.5px solid #e0e0e0 !important;
+}
+
+.dashboardCard
+{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  border-radius: 20px !important;
+  border: 0.5px solid #e0e0e0 !important;
+}
+.dashboardCard h4
+{
+	text-align: center;
+	font-family: sans-serif;
+}
+
+.projectCard img
+{
+	/* background-color: rgba(0, 0, 0, 0.1); */
+
+	box-shadow: rgba(100, 100, 111, 0.2) 0px 3px 20px 0px;
+	height: 45px;
+	width: 45px;
+	border-radius: 40%;
+	padding: 10px;
 }
