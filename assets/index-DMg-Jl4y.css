@@ -1,4 +1,4 @@
-@charset "UTF-8";.login .card{box-shadow:#64646f33 0 7px 29px;border:1px solid #e0e0e0;border-radius:.5rem}.login .card h4{color:#624bff}.login button{background-color:#624bff!important;width:100%}/*!
+@charset "UTF-8";.login .card{box-shadow:#64646f33 0 7px 29px;border:1px solid #e0e0e0;border-radius:.5rem}.login .card h4{color:#624bff}.login button{background-color:#624bff!important;width:100%}.cardForRadius{box-shadow:#64646f33 0 7px 29px;border-radius:24px!important;border:.5px solid #e0e0e0!important}.dashboardCard{box-shadow:#0000001a 0 4px 12px;border-radius:20px!important;border:.5px solid #e0e0e0!important}.dashboardCard h4{text-align:center;font-family:sans-serif}.projectCard img{box-shadow:#64646f33 0 3px 20px;height:45px;width:45px;border-radius:40%;padding:10px}/*!
  * Bootstrap  v5.3.3 (https://getbootstrap.com/)
  * Copyright 2011-2024 The Bootstrap Authors
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
