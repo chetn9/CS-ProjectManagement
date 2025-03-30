@@ -15,6 +15,8 @@ function EditProject(){
     const [error, setError] = useState({
         Title: "",
         Description: "",
+        Faculty1: "",
+        Faculty2: "",
         Technology: "",
         Database: ""
     });
@@ -23,12 +25,15 @@ function EditProject(){
         Title: "",
         Description: "",
         Technology: "",
+        Faculty1: "",
+        Faculty2: "",
         Database: ""
     });
 
     const [projectTechnology, setProjectTechnology] = useState(null);
     const [projectDatabase, setProjectDatabase] = useState("");
     const [techId, setTechId] = useState(null);
+    const [facultyData, setFacultyData] = useState("");
 
     // For loading Project with ID
     useEffect(()=>{
@@ -39,12 +44,26 @@ function EditProject(){
 
             if(dataFromFirebase)
             {
-                setProjectData({
-                    Title: dataFromFirebase.Title,
-                    Description: dataFromFirebase.Description,
-                    Technology: dataFromFirebase.Technology,
-                    Database: dataFromFirebase.Database
-                });
+                if(snapshot.hasChild("Faculty"))
+                {
+                    setProjectData({
+                        Title: dataFromFirebase.Title,
+                        Description: dataFromFirebase.Description,
+                        Faculty1 : dataFromFirebase.Faculty.Faculty1,
+                        Faculty2 : dataFromFirebase.Faculty.Faculty2,
+                        Technology: dataFromFirebase.Technology,
+                        Database: dataFromFirebase.Database
+                    });
+                }
+                else
+                {
+                    setProjectData({
+                        Title: dataFromFirebase.Title,
+                        Description: dataFromFirebase.Description,
+                        Technology: dataFromFirebase.Technology,
+                        Database: dataFromFirebase.Database
+                    });
+                }
 
                 setTechId(dataFromFirebase.Technology);
                 console.log("Project ID", dataFromFirebase.Title);
@@ -70,6 +89,32 @@ function EditProject(){
         };
         
     }, [projectId]);
+
+    // Fetching Faculty
+
+    useEffect(()=>{
+        const dataRef = ref(database, "users");
+
+        onValue(dataRef, (snapshot) => {
+            const dataFromFirebase = snapshot.val();
+
+            if(dataFromFirebase)
+            {
+                const usersArray = Object.entries(dataFromFirebase).map(([id, user]) => ({
+                    id,
+                    ...user,
+                }));
+
+                const facultyList = usersArray.filter((user) => user.Role === "Faculty");
+                setFacultyData(facultyList);
+                // console.log(studentData);
+            }
+            else
+            {
+                setFacultyData([]);
+            }
+        }); 
+    }, [])
 
     // Fetching Technology and Database
     useEffect(()=>{
@@ -153,6 +198,7 @@ function EditProject(){
 
         const projectRef = ref(database, 'projects/data/' + projectId);
         console.log(formValidation());
+        console.log(projectData.Faculty1);
 
         if(formValidation())
         {
@@ -160,6 +206,9 @@ function EditProject(){
             await update(projectRef, {
                 Title: projectData.Title.trim(),
                 Description: projectData.Description.trim(),
+                Faculty: {"Faculty1": projectData.Faculty1,
+                    "Faculty2": projectData.Faculty2},
+
                 Technology: projectData.Technology.trim(),
                 Database: projectData.Database.trim()
             })
@@ -228,6 +277,43 @@ function EditProject(){
                                             <label htmlFor="" className="my-2">Project Description</label>
                                             <input type="text" value={projectData.Description} onChange={inputData} placeholder="Project Description" name="Description" className={`form-control ${error.Description ? "is-invalid" : ""}`} />
                                             {error.Description && <p className="text-danger">{error.Description}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="row form-group my-2">
+                                        <div className="col-lg-6">
+                                            <label htmlFor="" className="mb-2">Faculty</label>
+                                            <select required name="Faculty1" id="" onChange={inputData} className={`form-control ${error.Faculty1 ? "is-invalid" : ""}`}>
+                                            
+                                                {
+                                                    projectData.Faculty1 ? (<option value={projectData.Faculty1}>{projectData.Faculty1}</option>)
+                                                    : (<option value="">Select Faculty 1</option>)
+                                                }
+                                                {
+                                                    facultyData && facultyData.map((item, index)=>(
+                                                        <option key={index} value={item.id}>{item.FirstName} {item.LastName}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                            {/* <input type="text" value={projectData.Technology}  placeholder="Project Technology" name="Technology"  /> */}
+                                            {error.Faculty1 && <p className="text-danger">{error.Faculty1}</p>}
+                                        </div>
+
+                                        <div className="col-lg-6">
+                                            <label htmlFor="" className="mb-2">Faculty 2</label>
+                                            <select required name="Faculty2" id="" onChange={inputData} className={`form-control ${error.Faculty2 ? "is-invalid" : ""}`}>
+                                                {
+                                                    projectData.Faculty2 ? (<option value={projectData.Faculty2}>{projectData.Faculty2}</option>)
+                                                    : (<option value="">Select Faculty 2</option>)
+                                                }
+                                                {
+                                                    facultyData && facultyData.map((item, index)=>(
+                                                        <option key={index} value={item.id}>{item.FirstName} {item.LastName}</option>
+                                                    ))
+                                                }
+                                            </select>
+                                            {/* <input type="text" value={projectData.Technology}  placeholder="Project Technology" name="Technology"  /> */}
+                                            {error.Faculty2 && <p className="text-danger">{error.Faculty2}</p>}
                                         </div>
                                     </div>
 
