@@ -56,7 +56,6 @@ function Dashboard() {
 
                     <div className="col-lg-3">
                         <div className="card dashboardCard">
-
                             <div className="card-body projectCard">
                                 <div className="d-flex justify-content-between align-items-center">
                                     <h4 className=" my-auto">Total Students</h4>
@@ -67,7 +66,7 @@ function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="col-lg-3">
+                    <div className="col-lg-3 mt-lg-0 mt-3">
                         <div className="card dashboardCard">
 
                             <div className="card-body projectCard">
@@ -83,7 +82,7 @@ function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="col-lg-3">
+                    <div className="col-lg-3 mt-lg-0 mt-3 ">
                         <div className="card dashboardCard">
 
                             <div className="card-body projectCard">
@@ -98,12 +97,12 @@ function Dashboard() {
                         </div>
                     </div>
 
-                    <div className="col-lg-3">
+                    <div className="col-lg-3 mt-lg-0 mt-3 ">
                         <div className="card dashboardCard">
 
                             <div className="card-body projectCard">
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <h4>Total Tasks</h4>
+                                    <h4 className="my-auto">Total Tasks</h4>
                                     <img src={taskListImg} alt="" style={{backgroundColor: "#1e90ff"}} />
                                 </div>
                                 <p>50</p>
