@@ -193,12 +193,13 @@ function StudentProjects() {
             
                 <div className="row mx-1">
                 
-
                     <div className="card overflow-hidden p-0 cardForRadius">
                         <div className="card-header bg-white border-0 text-dark p-3">
                             <div className="d-lg-flex align-items-center projectCard">
-                                <img src={projectImg} style={{background: "#1e90ff"}} alt="" />
-                                <h3 className="mx-3 fw-bold my-auto">Student Projects</h3>
+                                <div className="d-flex">
+                                    <img src={projectImg} style={{background: "#1e90ff"}} alt="" />
+                                    <h3 className="mx-3 mt-2 fw-bold my-auto">Student Projects</h3>
+                                </div>
 
                                 <form onSubmit={formSubmit} className="mt-lg-0 mt-3 ms-auto d-flex align-items-center">
                                 
