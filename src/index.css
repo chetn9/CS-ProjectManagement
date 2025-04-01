@@ -154,6 +154,12 @@ button:focus-visible {
 	color: #40739e;
 	font-weight: 800;
 }
+.projectCard h3
+{
+  color: #2f3542;
+  letter-spacing: 0.5px;
+  font-family: sans-serif;
+}
 
 @media only screen and (max-width: 768px) 
 {

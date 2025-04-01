@@ -49,7 +49,7 @@ function App() {
     }, []);
 
 	useEffect(() => {
-        console.log("User Logged In:", isUserValid);
+        // console.log("User Logged In:", isUserValid);
 		setLogOutBtn(isUserValid);
     }, [isUserValid]);
 

@@ -122,12 +122,11 @@ function StudentList() {
                         <div className="card-body">
 
                             {
-                                studentData === null ? (
+                                studentData == 0 || studentData == null ? (
                                     <ShimmerLoader />
                             ): (
                                     <div className="table-responsive-sm">
 
-                                
                                     <table ref={tableRef} id="myTable" className="display table table-bordered text-center text-nowrap">
                                         <thead>
                                             <tr>
@@ -157,7 +156,7 @@ function StudentList() {
                                                 <td className="text-center">
                                                 <LinkButton to={`/Edit-Student/${user.id}`} className={"btn btn-outline-primary"} text={"Edit"}/>
                                                 <span className="mx-2">|</span> 
-                                                <button type="submit" className="ml-3 btn btn-outline-danger" onClick={()=>deleteRecord(user.id)}> Delete <i class="bi bi-x-circle-fill"></i></button>
+                                                <button type="submit" className="ml-3 btn btn-outline-danger" onClick={()=>deleteRecord(user.id)}> Delete <i className="bi bi-x-circle-fill"></i></button>
                                                 </td>
                                             </tr>
                                             ))}                                    

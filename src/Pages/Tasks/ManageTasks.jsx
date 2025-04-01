@@ -18,15 +18,18 @@ function ManageTask()
     const tableRef = useRef(null);
 
     const {projectId} = useParams();
+
     const [taskList, setTaskList] = useState([]);
+    const [noTask, setNoTask] = useState(false);
+
     // let table = new DataTable('#myTable');
 
-    const fetchTasks = ()=>{
-        const dataRef = ref(database, 'tasks');
+    const fetchTasks = ()=>{// Fetching task according to ProjectID
+        const dataRef = ref(database, `projects/data/${projectId}/tasks`);
 
-        const dataQuery = query(dataRef, orderByChild("ProjectId"), equalTo(projectId));
+        // const dataQuery = query(dataRef, orderByChild("ProjectId"), equalTo(projectId));
 
-        onValue(dataQuery, (snapshot)=>{
+        onValue(dataRef, (snapshot)=>{
             if(snapshot.exists())
             {
                 const taskData = snapshot.val();
@@ -38,11 +41,16 @@ function ManageTask()
 
                 setTaskList(taskArray);
             }
+            else
+            {
+                setNoTask(true);
+            }
         });
 
         // return ()=>{
         //     setTaskList(null);
         // }
+
     }
 
     useEffect(() => {
@@ -56,11 +64,12 @@ function ManageTask()
             if ($.fn.dataTable.isDataTable(tableRef.current)) {
                 $(tableRef.current).DataTable().clear().destroy();
             }
+            setNoTask(false);
         };
 
     }, [projectId]);
 
-    // Effect to handle when studentData changes
+    // Effect to handle when taskData changes
     useEffect(() => {
 
         if (taskList.length > 0 && tableRef.current) {
@@ -72,7 +81,6 @@ function ManageTask()
                 ordering: true, 
             });
             
-
             // table.clear().rows.add(taskList).draw();
         }
     }, [taskList]);
@@ -88,7 +96,7 @@ function ManageTask()
 
     const deleteTask =(id)=>{
 
-        const dataRef = ref(database, 'tasks/'+id);
+        const dataRef = ref(database, `projects/data/${projectId}/tasks/${id}`)
 
         if(dataRef != null)
         {
@@ -103,10 +111,10 @@ function ManageTask()
             }).then((result) => {
                 if (result.isConfirmed) {
                     remove(dataRef).then(()=>{
-                        fetchTasks();
+                        // fetchTasks();
+                        // setTaskList((prevTasks) => prevTasks.filter(task => task.id !== id));
                     }).catch((error)=>{
-
-                        console.log(error);
+                        console.log("Error in catch",error);
                     });
                     MySwal.fire({
                     title: "Deleted! ",
@@ -121,9 +129,9 @@ function ManageTask()
             MySwal.fire({
                 title: "Warning! ",
                 text: "Title data not found Refresh the Page",
-                icon: "close"});
+                icon: "close"
+            });
         }
-
 
     }
 
@@ -138,8 +146,14 @@ function ManageTask()
                             </div>
                             <div className="card-body">
                                 {
-                                    taskList.length < 0 ? (
-                                       <ShimmerLoader />
+                                    taskList.length == 0 || taskList == null ? (
+                                        
+                                        <div>
+                                            <div className={noTask ? "d-none" : ""}>
+                                                <ShimmerLoader />
+                                            </div>
+                                            <h4 className={noTask ? "text-center" : "d-none "}>No Task found</h4>
+                                        </div>
                                     ) : (
 
                                         <div className="table-responsive">
