@@ -292,12 +292,12 @@ function StudentProjects() {
                                     <h5 className="text-center"><u>Group Details</u></h5>
                                     <div className="text-center mt-3">
                                         <div className="row">
-                                            <div className="col-lg-6">
+                                            <div className="col-lg-6 col-6">
                                                 <h6>Partner 1</h6>
                                                 <p className="badge badge-dark bg-dark">CS</p>
                                             </div>
 
-                                            <div className="col-lg-6">
+                                            <div className="col-lg-6 col-6">
                                                 <h6>Partner 2</h6>
                                                 <p className="badge badge-dark bg-dark">CS</p>
                                             </div>
@@ -311,12 +311,12 @@ function StudentProjects() {
                                     <h5 className="text-center"><u>Faculty Details</u></h5>
                                     <div className="text-center mt-3">
                                         <div className="row">
-                                            <div className="col-lg-6">
+                                            <div className="col-lg-6 col-6">
                                                 <h6>Faculty 1</h6>
                                                 <p className="badge badge-dark bg-dark">CS</p>
                                             </div>
 
-                                            <div className="col-lg-6">
+                                            <div className="col-lg-6 col-6">
                                                 <h6>Faculty 2</h6>
                                                 <p className="badge badge-dark bg-dark">CS</p>
                                             </div>
@@ -326,12 +326,12 @@ function StudentProjects() {
                                 <hr />
 
                                 <div className="row text-center">
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-6 col-6">
                                         <h5>Technology</h5>
                                         <p className="badge badge-dark bg-dark">React</p>
                                     </div>
 
-                                    <div className="col-lg-6">
+                                    <div className="col-lg-6 col-6">
                                         <h5>Database</h5>
                                         <p className="badge badge-dark bg-dark">MongoDB</p>
                                     </div>
