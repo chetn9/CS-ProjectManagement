@@ -68,7 +68,7 @@ function Header({isValid}) {
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                             <Navbar.Collapse id="basic-navbar-nav mx-auto">
                                 <Nav className="mx-auto">
-                                    <Link to="/Dashboard" className="nav-link mx-2">Home</Link>
+                                    <Link to="/" className="nav-link mx-2">Home</Link>
                                     
                                     <NavDropdown title="Manage Students" className="mx-2" id="basic-nav-dropdown">
                                         
@@ -121,7 +121,7 @@ function Header({isValid}) {
                     <Route path="/Login" element={<Login />  } />
                     <Route path="/" element={<ProtectedRoute/>}>
                 
-                        <Route path="/Dashboard" element={<Dashboard />} />
+                        <Route path="/" element={<Dashboard />} />
                         <Route path="/Student-List" element={<StudentList /> } />
 
                         <Route path="/Add-New" element={<AddNewRecord />} />
