@@ -158,7 +158,7 @@ function EditProject(){
     return (
         <>
             <div className="container mt-3">
-                <div className="row">
+                <div className="row justify-content-center">
                     <div className="col-lg-6">
                 {
                     studentData === null ? (

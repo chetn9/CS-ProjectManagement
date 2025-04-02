@@ -58,6 +58,9 @@ function App() {
 			<Router basename='/'>
 				{/* <ProtectedRoute /> */}
 				<Header isValid={logOutBtn}  />
+				<footer>
+					footer
+				</footer>
 			</Router>
 		</>
 	);

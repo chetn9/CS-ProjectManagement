@@ -12,12 +12,18 @@ import withReactContent from 'sweetalert2-react-content'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import projectImg from "../assets/project_web_light_96.png";
+import { data } from "jquery";
 
 function StudentProjects() {
 
     const [projectData, setProjectData] = useState(null);
     const [dueDate, setDueDate] = useState('');
     const [show, setShow] = useState(false);
+    const [projectDetails, setProjectDetails] = useState('');
+    const [faculty1, setFaculty1] = useState('');
+    const [faculty2, setFaculty2] = useState('');
+    const [tech, setTech] = useState('');
+    const [db, setDb] = useState('');
 
     const handleClose = () => setShow(false);
 
@@ -90,10 +96,92 @@ function StudentProjects() {
         const dataRef = ref(database, `projects/data/${e}`);
 
         onValue(dataRef, (snapshot)=>{
-            console.log(snapshot.val());
+            const dataFromFirebase = snapshot.val();
+            // console.log(snapshot.val());
+
+            setProjectDetails(dataFromFirebase);
+            // console.log(dataFromFirebase.Title);
+
+            if(snapshot.hasChild("Faculty"))
+            {
+                loadFaculty(dataFromFirebase.Faculty.Faculty1, dataFromFirebase.Faculty.Faculty2)
+            }
+            else
+            {
+                setFaculty1("Not Assigned");
+                setFaculty2("Not Assigned");
+            }
+
+            if(snapshot.hasChild("Technology"))
+            {
+                loadTech(dataFromFirebase.Technology);
+            }
+            else
+            {
+                setTech("No selected");
+            }
+
+            if(snapshot.hasChild("Database"))
+            {
+                loadDB(dataFromFirebase.Database);
+            }
+            else
+            {
+                setDb("No selected");
+            }
+        });
+        
+        // console.log(e);
+    }
+
+    const loadTech = (e1)=>{
+        const techRef = ref(database, `technology_database/technologies/${e1}`);
+
+        onValue(techRef, (snapshot)=>{
+            if(snapshot.exists())
+            {
+                const data = snapshot.val();
+                setTech(data.technology);
+            }
+        });
+    }
+
+    const loadDB = (e1)=>{
+        const dbRef = ref(database, `technology_database/databases/${e1}`);
+
+        onValue(dbRef, (snapshot)=>{
+            if(snapshot.exists())
+            {
+                const data = snapshot.val();
+                setDb(data.database);
+            }
+        });
+    }
+    
+    const loadFaculty = (e1, e2)=>{
+        const dataRef = ref(database, `users/${e1}`);
+
+        onValue(dataRef, (snapshot)=>{
+            if(snapshot.exists())
+            {
+                const dataFromFirebase = snapshot.val();
+                setFaculty1(dataFromFirebase.FirstName + " "+ dataFromFirebase.LastName);
+                // setFaculty2(dataFromFirebase.FirstName);
+                // console.log(faculty1);
+            }
+            
         });
 
-        console.log(e);
+        const dataRef2 = ref(database, `users/${e2}`);
+
+        onValue(dataRef2, (snapshot)=>{
+            if(snapshot.exists())
+            {
+                const dataFromFirebase = snapshot.val();
+                // setFaculty1(dataFromFirebase.FirstName);
+                setFaculty2(dataFromFirebase.FirstName +" "+ dataFromFirebase.LastName);
+            }
+        });
     }
 
     // const inputDate = (e)=>{
@@ -282,43 +370,48 @@ function StudentProjects() {
                                 <Modal.Title>Project Details</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <h4 className="text-center text-success">Stock market Portfolio Management App</h4>
+                                <h4 className="text-center text-success">{projectDetails.Title}</h4>
                                 <hr />
                                 
-                                <h5 >Due Date : <span className="badge badge-dark bg-dark">25-04-2025</span></h5>
+                                <h5 >Due Date : <span className="badge badge-dark projectDetailBadge">{projectDetails.DueDate}</span></h5>
                                 <hr />
 
-                                <div>
-                                    <h5 className="text-center"><u>Group Details</u></h5>
-                                    <div className="text-center mt-3">
-                                        <div className="row">
-                                            <div className="col-lg-6 col-6">
-                                                <h6>Partner 1</h6>
-                                                <p className="badge badge-dark bg-dark">CS</p>
+                                {
+                                    projectDetails.isGroup == true ? (
+
+                                        <>
+                                            <h5 className="text-center"><u>Group Details</u></h5>
+                                            <div className="text-center mt-3">
+                                                <div className="row">
+                                                    <div className="col-lg-6 col-6">
+                                                        <h6>Partner 1</h6>
+                                                        <p className="badge badge-dark projectDetailBadge">CS</p>
+                                                    </div>
+
+                                                    <div className="col-lg-6 col-6">
+                                                        <h6>Partner 2</h6>
+                                                        <p className="badge badge-dark projectDetailBadge">CS</p>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <hr />
+                                        </>
+                                    ) : ("")
+                                }
 
-                                            <div className="col-lg-6 col-6">
-                                                <h6>Partner 2</h6>
-                                                <p className="badge badge-dark bg-dark">CS</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <hr />
-
+                            
                                 <div>
                                     <h5 className="text-center"><u>Faculty Details</u></h5>
                                     <div className="text-center mt-3">
                                         <div className="row">
                                             <div className="col-lg-6 col-6">
                                                 <h6>Faculty 1</h6>
-                                                <p className="badge badge-dark bg-dark">CS</p>
+                                                <p className="badge badge-dark projectDetailBadge">{faculty1}</p>
                                             </div>
 
                                             <div className="col-lg-6 col-6">
                                                 <h6>Faculty 2</h6>
-                                                <p className="badge badge-dark bg-dark">CS</p>
+                                                <p className="badge badge-dark projectDetailBadge">{faculty2}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -328,19 +421,19 @@ function StudentProjects() {
                                 <div className="row text-center">
                                     <div className="col-lg-6 col-6">
                                         <h5>Technology</h5>
-                                        <p className="badge badge-dark bg-dark">React</p>
+                                        <p className="badge badge-dark projectDetailBadge">{tech}</p>
                                     </div>
 
                                     <div className="col-lg-6 col-6">
                                         <h5>Database</h5>
-                                        <p className="badge badge-dark bg-dark">MongoDB</p>
+                                        <p className="badge badge-dark projectDetailBadge">{db}</p>
                                     </div>
                                 </div>
 
                                 <hr />
 
                                 <div>
-                                    <h5>Project Status: <span className="badge badge-dark bg-primary">On Going</span></h5>
+                                    <h5>Project Status: <span className="badge badge-dark bg-success">{projectDetails.ProjectStatus}</span></h5>
                                 </div>
                             </Modal.Body>
                             
@@ -349,9 +442,7 @@ function StudentProjects() {
                                 <Button variant="secondary" onClick={handleClose}>
                                     Close
                                 </Button>
-                                <Button variant="primary" onClick={handleClose}>
-                                    Edit
-                                </Button>
+                                <LinkButton to={`/Project-Edit/${projectDetails.ProjectId}`} className="btn btn-outline-primary" text={"Edit"}/>
                             </Modal.Footer>
                         </Modal>
                     </div>

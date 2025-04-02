@@ -4,7 +4,6 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import { Navigate, Router, Routes, useNavigate } from "react-router-dom";
 
-
 const MySwal = withReactContent(Swal)
 
 function Login({setIsAuthenticated})
@@ -36,7 +35,7 @@ function Login({setIsAuthenticated})
             const token = await loggedInUser.getIdToken();
             localStorage.setItem("userId", token);
             // setIsAuthenticated(true);
-            navigate("/Dashboard");
+            navigate("/");
 
             console.log(loggedInUser.uid);
 
