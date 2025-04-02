@@ -2,7 +2,7 @@ import {React, useEffect, useState} from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, get, ref, onValue, remove, update } from "firebase/database";
+import { getDatabase, get, ref, onValue, remove, update, off } from "firebase/database";
 import LinkButton from "../Components/UpdateLinkButton";
 import ShimmerLoader from "../Components/ShimmerEffect";
 import DataTable from 'datatables.net-react';
@@ -86,6 +86,8 @@ function StudentProjects() {
                 
         return () => {
             setProjectData(null);
+            off(dataRef);
+            console.log("unmount Projects");
         };
 
     }, []);

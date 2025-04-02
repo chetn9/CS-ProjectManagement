@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { data, useParams } from "react-router-dom";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, ref, onValue, update } from "firebase/database";
+import { getDatabase, ref, onValue, update, off } from "firebase/database";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -86,6 +86,8 @@ function EditProject(){
                 Technology: "",
                 Database: ""
             });
+
+            off(dataRef);
         };
         
     }, [projectId]);
@@ -114,6 +116,10 @@ function EditProject(){
                 setFacultyData([]);
             }
         }); 
+
+        return()=>{
+            off(dataRef);
+        }
     }, [])
 
     // Fetching Technology and Database
@@ -161,6 +167,8 @@ function EditProject(){
         return ()=>{
             setProjectTechnology(null);
             setProjectDatabase(null);
+            off(techRef);
+            off(dbRef);
         };
 
     }, []);

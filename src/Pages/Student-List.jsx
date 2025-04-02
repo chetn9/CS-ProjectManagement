@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useRef } from "react";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, ref, onValue, remove } from "firebase/database";
+import { getDatabase, ref, onValue, remove, off } from "firebase/database";
 import { Link } from "react-router-dom";
 import LinkButton from "../Components/UpdateLinkButton";
 import Swal from 'sweetalert2'
@@ -58,8 +58,22 @@ function StudentList() {
             {
                 setStudentData([]);
             }
-        });      
+        }); 
+        
+        return ()=>{
+            off(dataRef);
+        }
     }
+
+    useEffect(()=>{
+        const data = fetchStudentData();
+
+        return ()=>{
+            setStudentData([]);
+            data();
+            console.log("Unmount Student");
+        }
+    }, []);
 
     useEffect(() => {
         fetchStudentData();

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { database } from "../../Firebase/firebase-config";
-import { getDatabase, ref, onValue, remove, push } from "firebase/database";
+import { getDatabase, ref, onValue, remove, push, off } from "firebase/database";
 import ShimmerLoader from "../../Components/ShimmerEffect";
 import LinkButton from "../../Components/UpdateLinkButton";
 import SuccessMsg from "../../Components/SuccessMsg";
@@ -51,10 +51,11 @@ function ManageDatabase()
             }
         });
 
-        console.log(dbList);
+        // console.log(dbList);
 
         return ()=>{
             setDbList(null);
+            off(dataRef);
         }
 
     }, []);
@@ -84,6 +85,7 @@ function ManageDatabase()
 
         return ()=>{
             setTechList(null);
+            off(dataRef);
         }
 
     }, []);

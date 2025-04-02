@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { data, useParams } from "react-router-dom";
 import { database } from "../../Firebase/firebase-config";
-import { getDatabase, get, ref, onValue, remove, update, query, orderByChild, equalTo } from "firebase/database";
+import { getDatabase, get, ref, onValue, remove, update, query, orderByChild, equalTo, off } from "firebase/database";
 import ShimmerLoader from "../../Components/ShimmerEffect";
 import $ from 'jquery';
 import DataTable from 'datatables.net-react';
@@ -40,6 +40,7 @@ function ManageTask()
                 }));
 
                 setTaskList(taskArray);
+                console.log(taskArray.length);
             }
             else
             {
@@ -47,11 +48,20 @@ function ManageTask()
             }
         });
 
-        // return ()=>{
-        //     setTaskList(null);
-        // }
-
+        return ()=>{
+            off(dataRef);
+        };
     }
+
+    useEffect(()=>{
+        const data = fetchTasks();
+
+        return ()=>{
+            setTaskList([]);
+            data();
+            console.log("Unmount firebase");
+        }
+    }, []);
 
     useEffect(() => {
         if(projectId)
@@ -64,22 +74,35 @@ function ManageTask()
             if ($.fn.dataTable.isDataTable(tableRef.current)) {
                 $(tableRef.current).DataTable().clear().destroy();
             }
+
             setNoTask(false);
+            console.log("Unmount DataTable");
         };
 
     }, [projectId]);
 
+    useEffect(()=>{
+        console.log("Workes when task changes");
+        // console.log(taskList);
+        
+    }, [taskList]);
+
     // Effect to handle when taskData changes
     useEffect(() => {
-
-        if (taskList.length > 0 && tableRef.current) {
+       
+        if (taskList.length > 0 || taskList == null && tableRef.current) {
             // Initialize DataTable only after studentData is loaded
             const table = $(tableRef.current).DataTable({
                 destroy: true, // Ensure previous instance is destroyed
                 paging: true,  // Enable paging
                 searching: true, // Enable searching
-                ordering: true, 
-            });
+                ordering: true,
+        });
+
+            // tableRef.current = table;
+
+            // Manually trigger redraw (important when data is updated)
+            // table.clear().rows.add(taskList).draw();
             
             // table.clear().rows.add(taskList).draw();
         }
@@ -163,9 +186,9 @@ function ManageTask()
                                                         <th>#</th>
                                                         <th className="text-center">Title</th>
                                                         <th className="text-center">Status</th>
-                                                        <th className="text-center">Due Date</th>
-                                                        <th className="text-center">Assigned At</th>
-                                                        <th className="text-center">Updated At</th>
+                                                        <th className="text-center text-nowrap">Due Date</th>
+                                                        <th className="text-center text-nowrap">Assigned At</th>
+                                                        <th className="text-center text-nowrap">Updated At</th>
                                                         <th className="text-center">Assigned By</th>
                                                         <th className="text-center">Action</th>
                                                     </tr>
@@ -181,10 +204,10 @@ function ManageTask()
                                                                 <td className="text-nowrap">{item.due_date}</td>
                                                                 <td className="text-center">{item.AssignedAt ? item.AssignedAt : "-"}</td>
                                                                 <td className="text-center">{item.UpdatedAt ? item.UpdatedAt : "-"}</td>
-                                                                <td className="text-center">{item.AssignedBy ? item.AssignedBy : "-" }</td>
+                                                                <td className="text-center text-nowrap">{item.AssignedBy ? item.AssignedBy : "-" }</td>
                                                                 <td className="text-nowrap">
                                                                     <button data-bs-toggle="modal" data-bs-target="#exampleModal" data={item.id} className="btn btn-primary mx-auto" type="submit" onClick={()=>{e.preventDefault()}}>Edit</button>
-                                                                    <button className="mx-2 btn btn-danger mt-lg-0 mt-2" type="submit" onClick={()=>{deleteTask(item.id)}}>Delete</button>
+                                                                    <button className="mx-2 btn btn-danger" type="submit" onClick={()=>{deleteTask(item.id)}}>Delete</button>
                                                                 </td>
                                                             
                                                             </tr>

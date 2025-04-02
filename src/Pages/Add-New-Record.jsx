@@ -93,24 +93,24 @@ function AddNewRecord() {
 
                                     <div className="row form-group ">
                                         <div className="col-lg-12">
-                                            <label for="" className="mb-2">First Name</label>
-                                            <input type="text" value={userData.FirstName} onChange={inputData} placeholder="First Name" name="FirstName" className={`form-control ${error.FirstName ? "is-invalid" : ""}`} id="" />
+                                            <label htmlFor="" className="mb-2">First Name</label>
+                                            <input type="text" value={userData.FirstName} onChange={inputData} placeholder="First Name" name="FirstName" className={`form-control ${error.FirstName ? "is-invalid" : ""}`} />
                                             {error.FirstName && <p className="text-danger">{error.FirstName}</p>}
                                         </div>
                                     </div>
 
                                     <div className="row form-group mt-2">
                                         <div className="col-lg-12">
-                                            <label for="" className="mb-2">Last Name</label>
-                                            <input type="text" value={userData.LastName} onChange={inputData} placeholder="Last Name" name="LastName" className={`form-control ${error.LastName ? "is-invalid" : ""}`} id="" />
+                                            <label htmlFor="" className="mb-2">Last Name</label>
+                                            <input type="text" value={userData.LastName} onChange={inputData} placeholder="Last Name" name="LastName" className={`form-control ${error.LastName ? "is-invalid" : ""}`}  />
                                             {error.LastName && <p className="text-danger">{error.LastName}</p>}
                                         </div>
                                     </div>
 
                                     <div className="row form-group mt-2">
                                         <div className="col-lg-12">
-                                            <label for="" className="mb-2">Email</label>
-                                            <input type="text" value={userData.Email} onChange={inputData} placeholder="Email" name="Email" className={`form-control ${error.Email ? "is-invalid" : ""}`} id="" />
+                                            <label htmlFor="" className="mb-2">Email</label>
+                                            <input type="text" value={userData.Email} onChange={inputData} placeholder="Email" name="Email" className={`form-control ${error.Email ? "is-invalid" : ""}`} />
                                             {error.Email && <p className="text-danger">{error.Email}</p>}
                                         </div>
                                     </div>
@@ -118,9 +118,9 @@ function AddNewRecord() {
                                     <div className="row form-group mt-2">
 
                                         <div className="col-lg-6">
-                                            <label for="" className="mb-2">Role</label>
+                                            <label htmlFor="" className="mb-2">Role</label>
 
-                                            <select name="Role" value={userData.Role} onChange={inputData} id="" className={`form-control ${error.Role ? "is-invalid" : ""}`}>
+                                            <select name="Role" value={userData.Role} onChange={inputData}  className={`form-control ${error.Role ? "is-invalid" : ""}`}>
                                                 <option value="">Select Role</option>
                                                 <option value="Faculty">Faculty</option>
                                                 <option value="Student">Student</option>
@@ -130,9 +130,9 @@ function AddNewRecord() {
                                         </div>
 
                                         <div className="col-lg-6">
-                                            <label for="" className="mb-2">Password</label>
+                                            <label htmlFor="" className="mb-2">Password</label>
 
-                                            <input type="text" value={userData.Password} onChange={inputData} className={`form-control ${error.Password ? "is-invalid" : ""}`} name="Password" id="" />
+                                            <input type="text" value={userData.Password} onChange={inputData} className={`form-control ${error.Password ? "is-invalid" : ""}`} name="Password"  />
                                             {error.Password && <p className="text-danger">{error.Password}</p>}
                                         </div>
                                     </div>

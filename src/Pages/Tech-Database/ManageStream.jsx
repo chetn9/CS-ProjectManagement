@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { database } from "../../Firebase/firebase-config";
-import { getDatabase, ref, onValue, remove } from "firebase/database";
+import { getDatabase, ref, onValue, remove, off } from "firebase/database";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -16,7 +16,6 @@ function ManageStream()
     const [techList, setTechList] = useState(null);
     const MySwal = withReactContent(Swal);
     DataTable.use(DT);
-    
     
     useEffect(()=>{
         const dataRef = ref(database, 'streams/');
@@ -40,10 +39,11 @@ function ManageStream()
             }
         });
 
-        console.log(techList);
+        // console.log(techList);
 
         return ()=>{
             setTechList(null);
+            off(dataRef);
         }
 
     }, []);

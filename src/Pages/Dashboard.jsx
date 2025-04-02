@@ -35,7 +35,7 @@ function Dashboard() {
                 const studentData = usersArray.filter((user) => user.Role === "Student");
                 setUserData(studentData);
 
-                console.log(studentData);
+                // console.log(studentData);
             }
             else
             {
