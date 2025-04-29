@@ -9,6 +9,7 @@ import DT from 'datatables.net-bs5';
 
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import taskImg from "../../assets/checklist_web_light_96.png"
 
 DataTable.use(DT);
 function ManageTask()
@@ -21,6 +22,13 @@ function ManageTask()
 
     const [taskList, setTaskList] = useState([]);
     const [noTask, setNoTask] = useState(false);
+    const [displayTask, setDisplayTask] = useState("");
+    const [editTask, setEditTask] = useState({
+        "id": "",
+        "title": "",
+        "desc": "",
+        "due_date": "",
+    })
 
     // let table = new DataTable('#myTable');
 
@@ -108,13 +116,100 @@ function ManageTask()
         }
     }, [taskList]);
 
+    // Show Tasks in Form
+    const showEditTask = (id)=>{
+        const dataRef = ref(database, `projects/data/${projectId}/tasks/${id}`);
 
-    const inputData = (e)=>{
-
+        get(dataRef).then((snapshot)=>{
+            if(snapshot.exists())
+            {
+                const taskData = snapshot.val();
+                setEditTask({
+                    id: snapshot.key,
+                    title: taskData.Title,
+                    desc: taskData.Description,
+                    due_date: taskData.due_date,
+                });
+                console.log(taskData);
+            }
+            else
+            {
+                MySwal.fire({
+                    title: "Warning! ",
+                    text: "Title data not found Refresh the Page",
+                    icon: "close"
+                });
+            }
+        }).catch((error)=>{
+            console.log("Error in catch", error);
+        });
     }
 
-    const formSubmit=(e)=>{
+    // Display Task Details
+    const showTask = (id) => {
+        const dataRef = ref(database, `projects/data/${projectId}/tasks/${id}`);
 
+        get(dataRef).then((snapshot)=>{
+            if(snapshot.exists())
+            {
+                const taskData = snapshot.val();
+                setDisplayTask(taskData);
+                console.log(taskData);
+            }
+            else
+            {
+                MySwal.fire({
+                    title: "Warning! ",
+                    text: "Title data not found Refresh the Page",
+                    icon: "close"
+                });
+            }
+        }).catch((error)=>{
+            console.log("Error in catch", error);
+        });
+    }
+
+    const inputData = (e)=>{
+        const {name, value} = e.target;
+        setEditTask((prevData)=>({
+            ...prevData,
+            [name]: value
+        }));
+        // console.log(editTask);
+    }
+
+    const updateTask = (e)=>{
+        // console.log(e);
+        const dataRef = ref(database, `projects/data/${projectId}/tasks/${e}`);
+
+        if(dataRef != null)
+        {
+            update(dataRef, {
+                Title: editTask.title,
+                Description: editTask.desc,
+                due_date: editTask.due_date,
+            }).then(()=>{
+                MySwal.fire({
+                    title: "Updated! ",
+                    text: "Record has been updated.",
+                    icon: "success"
+                });
+            }).catch((error)=>{
+                console.log("Error in catch", error);
+            });
+        }
+        else
+        {
+            MySwal.fire({
+                title: "Warning! ",
+                text: "Title data not found Refresh the Page",
+                icon: "close"
+            });
+        }
+       
+    }
+    const formSubmit=(e)=>{
+        e.preventDefault();
     }
 
     const deleteTask =(id)=>{
@@ -160,12 +255,15 @@ function ManageTask()
 
     return (
         <>
-            <div className="container-fluid mt-3 mb-3">
+            <div className="container-fluid mb-3">
                 <div className="row">
                     <div className="col-lg-12">
-                        <div className="card border-dark">
-                            <div className="card-header bg-dark text-light">
-                                <h4 className="my-auto">Project Task List</h4>
+                        <div className="card overflow-hidden cardForRadius">
+                            <div className="card-header bg-white border-0 text-dark p-3">
+                                <div className="d-flex align-items-center projectCard">
+                                    <img src={taskImg} style={{background: "#1e90ff"}} alt="" />
+                                    <h4 className="my-auto mx-2">Task List</h4>
+                                </div>
                             </div>
                             <div className="card-body">
                                 {
@@ -189,7 +287,7 @@ function ManageTask()
                                                         <th className="text-center text-nowrap">Due Date</th>
                                                         <th className="text-center text-nowrap">Assigned At</th>
                                                         <th className="text-center text-nowrap">Updated At</th>
-                                                        <th className="text-center">Assigned By</th>
+                                                        {/* <th className="text-center">Assigned By</th> */}
                                                         <th className="text-center">Action</th>
                                                     </tr>
                                                 </thead>
@@ -204,9 +302,13 @@ function ManageTask()
                                                                 <td className="text-nowrap">{item.due_date}</td>
                                                                 <td className="text-center">{item.AssignedAt ? item.AssignedAt : "-"}</td>
                                                                 <td className="text-center">{item.UpdatedAt ? item.UpdatedAt : "-"}</td>
-                                                                <td className="text-center text-nowrap">{item.AssignedBy ? item.AssignedBy : "-" }</td>
+                                                                {/* <td className="text-center text-nowrap">{item.AssignedBy ? item.AssignedBy : "-" }</td> */}
+                                                               
+
                                                                 <td className="text-nowrap">
-                                                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal" data={item.id} className="btn btn-primary mx-auto" type="submit" onClick={()=>{e.preventDefault()}}>Edit</button>
+                                                                    <button data-bs-toggle="modal" data-bs-target="#exampleViewModal" data={item.id} className="btn btn-primary mx-2" type="submit" onClick={()=>{showTask(item.id)}}>View</button>
+                                                                    {/* <button>View</button> */}
+                                                                    <button data-bs-toggle="modal" data-bs-target="#exampleModal" data={item.id} className="btn btn-primary mx-auto" type="submit" onClick={()=>{showEditTask(item.id)}}>Edit</button>
                                                                     <button className="mx-2 btn btn-danger" type="submit" onClick={()=>{deleteTask(item.id)}}>Delete</button>
                                                                 </td>
                                                             
@@ -237,14 +339,24 @@ function ManageTask()
                                     <form onSubmit={formSubmit}>
                                         <div className="row form-group">
                                             <div className="col-lg-12">
-                                                <label htmlFor="" className="mb-2">Database</label>
-                                                <input type="text" required onChange={inputData} className="form-control" name="dbName" id="" />
+                                                <label htmlFor="" className="mb-2">Task</label>
+                                                <input type="text" value={editTask.title} required onChange={inputData} className="form-control" name="title" id="" />
+                                            </div>
+
+                                            <div className="col-lg-12 mt-2">
+                                                <label htmlFor="" className="mb-2">Task Details</label>
+                                                <input type="text"  value={editTask.desc} required onChange={inputData} className="form-control" name="desc" id="" />
+                                            </div>
+
+                                            <div className="col-lg-12 mt-2">
+                                                <label htmlFor="" className="mb-2">Due Date</label>
+                                                <input type="date" value={editTask.due_date} required onChange={inputData} className="form-control" name="due_date" id="" />
                                             </div>
                                         </div>
 
                                         <div className="row form-group mt-3">
                                             <div className="col-lg-6">
-                                                <button type="submit" className="btn btn-primary">Save changes</button>
+                                                <button type="submit" onClick={()=>{updateTask(editTask.id)}} className="btn btn-primary">Save changes</button>
                                             </div>
                                         </div>
                                     </form>
@@ -252,6 +364,42 @@ function ManageTask()
 
                                 <div className="modal-footer">
                                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                
+                    <div class="modal fade" id="exampleViewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Task Details</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>Task Title</p>
+                                    <h4 className="" style={{ color: "#333333" }}>{displayTask.Title}</h4>
+                                    <hr />
+
+                                    <p>Task Details</p>
+                                    <h4 className="" style={{ color: "#333333" }}>{displayTask.Description}</h4>
+                                    <hr />
+
+                                    <div className="d-flex projectDetailCard">
+                                        <div className="mx-3">
+                                            <h5 >Due Date : </h5>
+                                            <h6 className="badge badge-danger bg-danger">{displayTask.due_date}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    {/* <button type="button" class="btn btn-primary">Save changes</button> */}
                                 </div>
                             </div>
                         </div>

@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 
 import { data, useParams } from "react-router-dom";
 import { database } from "../../Firebase/firebase-config";
-import { getDatabase, ref, onValue, update } from "firebase/database";
+import { getDatabase, ref, onValue, update, off } from "firebase/database";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import EditPageShimmer from "../../Components/EditPageShimmer";
 
 const MySwal = withReactContent(Swal)
 
@@ -13,7 +14,8 @@ function EditProject(){
     const {studentId} = useParams();
 
     const [error, setError] = useState({});
-    const [streamData, setStreamData] = useState(null);
+    const [streamData, setStreamData] = useState([]);
+    const [studentStream, setStudentStream] = useState([]);
 
     const [studentData, setStudentData] = useState({
         FirstName: "",
@@ -60,6 +62,7 @@ function EditProject(){
         
     }, [studentId]);
 
+    // Fetching Stream
     useEffect(()=>{
         const dataRef = ref(database, 'streams');
 
@@ -68,6 +71,7 @@ function EditProject(){
 
             if(streams)
             {
+                setStudentStream(streams);
                 const streamArray = Object.entries(streams).map(([id, stream]) => ({
                     id,
                     ...stream,
@@ -83,8 +87,14 @@ function EditProject(){
 
         return ()=>{
             setStreamData(null);
+            off(dataRef);
+            console.log("Unmount Student Edit");
         };
     }, [])
+
+    useEffect(()=>{
+        console.log(streamData);
+    })
 
     const inputData = (e)=> {
         const {name, value} = e.target;
@@ -94,6 +104,11 @@ function EditProject(){
             [name]: value,
         }));
     };
+    
+    // useEffect(()=>{
+    //     console.log("Stream", studentStream[studentData.Stream].stream);
+
+    // }, [studentData]);
 
     const formValidation = ()=>{
 
@@ -157,84 +172,92 @@ function EditProject(){
 
     return (
         <>
-            <div className="container mt-3">
+            <div className="container ">
                 <div className="row justify-content-center">
                     <div className="col-lg-6">
-                {
-                    studentData === null ? (
-                        <p>Loding Data</p>
-                    ):(
+
                         <div className="card">
                             <div className="card-header">
                                 <h5 className="my-auto">Edit Student Data</h5>
                             </div>
                             <div className="card-body">
 
-                                <form onSubmit={formSubmit}>
-                                    <div className="row form-group">
-                                        <div className="col-lg-12">
-                                            <label htmlFor="" className="my-2">First Name</label>
-                                            <input type="text" value={studentData.FirstName} onChange={inputData} placeholder="First Name" name="FirstName" className={`form-control ${error.FirstName ? "is-invalid" : ""}`} />
-                                            {error.FirstName && <p className="text-danger">{error.FirstName}</p>}
-                                        </div>
-                                    </div>
+                                {
+                                    studentData.FirstName === "" ? (
+                                        <EditPageShimmer />
+                                    ) : (
 
-                                    <div className="row form-group my-2">
-                                        <div className="col-lg-12">
-                                            <label htmlFor="" className="my-2">Last Name</label>
-                                            <input type="text" value={studentData.LastName} onChange={inputData} placeholder="Last Name" name="LastName" className={`form-control ${error.LastName ? "is-invalid" : ""}`} />
-                                            {error.LastName && <p className="text-danger">{error.LastName}</p>}
-                                        </div>
-                                    </div>
+                                        <form onSubmit={formSubmit}>
+                                            <div className="row form-group">
+                                                <div className="col-lg-12">
+                                                    <label htmlFor="" className="my-2">First Name</label>
+                                                    <input type="text" value={studentData.FirstName} onChange={inputData} placeholder="First Name" name="FirstName" className={`form-control ${error.FirstName ? "is-invalid" : ""}`} />
+                                                    {error.FirstName && <p className="text-danger">{error.FirstName}</p>}
+                                                </div>
+                                            </div>
 
-                                    <div className="row form-group my-2">
-                                        <div className="col-lg-12">
-                                            <label htmlFor="" className="my-2">Email</label>
-                                            <input type="text" value={studentData.Email} onChange={inputData} placeholder="Email" name="Email" className={`form-control ${error.Email ? "is-invalid" : ""}`} />
-                                            {error.Email && <p className="text-danger">{error.Email}</p>}
-                                        </div>
-                                    </div>
+                                            <div className="row form-group my-2">
+                                                <div className="col-lg-12">
+                                                    <label htmlFor="" className="my-2">Last Name</label>
+                                                    <input type="text" value={studentData.LastName} onChange={inputData} placeholder="Last Name" name="LastName" className={`form-control ${error.LastName ? "is-invalid" : ""}`} />
+                                                    {error.LastName && <p className="text-danger">{error.LastName}</p>}
+                                                </div>
+                                            </div>
 
-                                    <div className="row form-group my-2">
-                                        <div className="col-lg-6">
-                                            <label htmlFor="" className="my-2">Stream</label>
+                                            <div className="row form-group my-2">
+                                                <div className="col-lg-12">
+                                                    <label htmlFor="" className="my-2">Email</label>
+                                                    <input type="text" value={studentData.Email} onChange={inputData} placeholder="Email" name="Email" className={`form-control ${error.Email ? "is-invalid" : ""}`} />
+                                                    {error.Email && <p className="text-danger">{error.Email}</p>}
+                                                </div>
+                                            </div>
 
-                                            <select name="Stream" onChange={inputData} id="" className={`form-control ${error.Stream ? "is-invalid" : ""}`}>
-                                                {
-                                                    studentData.Stream ? (
-                                                        <option value={studentData.Stream}>{studentData.Stream}</option>
-                                                    ) : (<option value="">Select Stream</option>)
-                                                }
-                                                {
-                                                    streamData && streamData.map((stream)=>(
-                                                        <option key={stream.id} value={stream.id}>{stream.stream}</option>
-                                                    ))
-                                                }
-                                            </select>
-                                            {/* <input type="text" value={studentData.Stream}  placeholder="Stream" name="Stream"  /> */}
-                                            {error.Stream && <p className="text-danger">{error.Stream}</p>}
-                                        </div>
+                                            <div className="row form-group my-2">
+                                                <div className="col-lg-6">
+                                                    <label htmlFor="" className="my-2">Stream</label>
 
-                                        <div className="col-lg-6">
-                                            <label htmlFor="" className="my-2">Semester</label>
-                                            <input type="text" value={studentData.Semester} onChange={inputData} placeholder="Semester" name="Semester" className={`form-control ${error.Semester ? "is-invalid" : ""}`} />
-                                            {error.Semester && <p className="text-danger">{error.Semester}</p>}
-                                        </div>
+                                                    <select name="Stream" onChange={inputData} id="" className={`form-control ${error.Stream ? "is-invalid" : ""}`}>
+                                                        {
+                                                            studentData.Stream ? (
+                                                                // <td className="text-center">{studentStream[user.Stream].stream}</td>
+                                                                // <option value={studentData.Stream}>{streamData[studentData.Stream].Stream}</option>
+                                                                <option value={studentStream[studentData.Stream] ? (studentData.Stream) : ""}>{studentStream[studentData.Stream] ? (studentStream[studentData.Stream].stream) : ("Select Stream")}</option>
+                                                            ) : (
+                                                                <option value="">Select Stream</option>
+                                                            )
+                                                            // studentData.Stream ? (
+                                                            //     <option value={studentData.Stream}>{studentData.Stream}</option>
+                                                            // ) : (<option value="">Select Stream</option>)
+                                                        }
+                                                        {
+                                                            streamData && streamData.map((stream) => (
+                                                                <option key={stream.id} value={stream.id}>{stream.stream}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                    {/* <input type="text" value={studentData.Stream}  placeholder="Stream" name="Stream"  /> */}
+                                                    {error.Stream && <p className="text-danger">{error.Stream}</p>}
+                                                </div>
 
-                                    </div>
+                                                <div className="col-lg-6">
+                                                    <label htmlFor="" className="my-2">Semester</label>
+                                                    <input type="text" value={studentData.Semester} onChange={inputData} placeholder="Semester" name="Semester" className={`form-control ${error.Semester ? "is-invalid" : ""}`} />
+                                                    {error.Semester && <p className="text-danger">{error.Semester}</p>}
+                                                </div>
 
-                                    <div className="row form-group mt-3">
-                                        <div className="col-lg-6">
-                                            <button type="submit" className="btn btn-primary">Update Record</button>
-                                        </div>
-                                    </div>
+                                            </div>
 
-                                </form>
+                                            <div className="row form-group mt-3">
+                                                <div className="col-lg-6">
+                                                    <button type="submit" className="btn btn-primary">Update Record</button>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    )
+                                }
                             </div>
                         </div>
-                        
-                    )
-                }
 
                     </div>
                 </div>

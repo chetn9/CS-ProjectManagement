@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { data, useParams } from "react-router-dom";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, ref, onValue, update, off } from "firebase/database";
+import { getDatabase, ref, onValue, update, off, set } from "firebase/database";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import EditPageShimmer from "../Components/EditPageShimmer";
 
 const MySwal = withReactContent(Swal)
 
@@ -34,6 +35,9 @@ function EditProject(){
     const [projectDatabase, setProjectDatabase] = useState("");
     const [techId, setTechId] = useState(null);
     const [facultyData, setFacultyData] = useState("");
+    const [displayFaculty, setDisplayFaculty] = useState({});
+    const [displayTech, setDisplayTech] = useState({});
+    const [displayDB, setDisplayDB] = useState({});
 
     // For loading Project with ID
     useEffect(()=>{
@@ -93,7 +97,6 @@ function EditProject(){
     }, [projectId]);
 
     // Fetching Faculty
-
     useEffect(()=>{
         const dataRef = ref(database, "users");
 
@@ -131,6 +134,7 @@ function EditProject(){
 
             if(techData)
             {
+                setDisplayTech(techData);
                 const techArray = Object.entries(techData).map(([id, tech]) => ({
                     id,
                     ...tech
@@ -151,6 +155,7 @@ function EditProject(){
 
             if(dbData)
             {
+                setDisplayDB(dbData);
                 const dbArray = Object.entries(dbData).map(([id, db]) => ({
                     id,
                     ...db
@@ -171,6 +176,41 @@ function EditProject(){
             off(dbRef);
         };
 
+    }, []);
+
+    // Fetching Faculty using Object
+    const fetchFacultyData = ()=>{
+        const dataRef = ref(database, 'users');
+
+        onValue(dataRef, (snapshot) => {
+            const dataFromFirebase = snapshot.val();
+
+            if(dataFromFirebase)
+            {
+                const facultyObject = Object.fromEntries(
+                    Object.entries(dataFromFirebase).filter(([id, user]) => user.Role === "Faculty")
+                );
+
+                setDisplayFaculty(facultyObject);
+            }
+            else
+            {
+                setDisplayFaculty([]);
+            }
+        }); 
+        
+        return ()=>{
+            off(dataRef);
+        }
+    }
+
+    useEffect(()=>{
+       const data = fetchFacultyData();
+
+        return ()=>{
+            data();
+            setDisplayFaculty({});
+        }
     }, []);
 
     const inputData = (e)=> {
@@ -258,12 +298,12 @@ function EditProject(){
 
     return (
         <>
-            <div className="container mt-3">
+            <div className="container ">
                 <div className="row justify-content-center">
                     <div className="col-lg-6">
                 {
-                    projectData === null ? (
-                        <p>Loding Data</p>
+                    projectData.Title === "" ? (
+                        <EditPageShimmer/>
                     ):(
                         <div className="card">
                             <div className="card-header">
@@ -292,9 +332,8 @@ function EditProject(){
                                         <div className="col-lg-6">
                                             <label htmlFor="" className="mb-2">Faculty</label>
                                             <select required name="Faculty1" id="" onChange={inputData} className={`form-control ${error.Faculty1 ? "is-invalid" : ""}`}>
-                                            
                                                 {
-                                                    projectData.Faculty1 ? (<option value={projectData.Faculty1}>{projectData.Faculty1}</option>)
+                                                    projectData.Faculty1 ? (<option value={projectData.Faculty1}>{displayFaculty[projectData.Faculty1] ? displayFaculty[projectData.Faculty1] ? displayFaculty[projectData.Faculty1].FirstName + " "+displayFaculty[projectData.Faculty1].LastName : "Select Faculty 1" : "Not Selected"}</option>)
                                                     : (<option value="">Select Faculty 1</option>)
                                                 }
                                                 {
@@ -311,7 +350,7 @@ function EditProject(){
                                             <label htmlFor="" className="mb-2">Faculty 2</label>
                                             <select required name="Faculty2" id="" onChange={inputData} className={`form-control ${error.Faculty2 ? "is-invalid" : ""}`}>
                                                 {
-                                                    projectData.Faculty2 ? (<option value={projectData.Faculty2}>{projectData.Faculty2}</option>)
+                                                    projectData.Faculty2 ? (<option value={projectData.Faculty2}>{displayFaculty[projectData.Faculty2] ? displayFaculty[projectData.Faculty2] ? displayFaculty[projectData.Faculty2].FirstName + " "+displayFaculty[projectData.Faculty2].LastName : "Select Faculty 2" : ("Not Selected")}</option>)
                                                     : (<option value="">Select Faculty 2</option>)
                                                 }
                                                 {
@@ -332,7 +371,7 @@ function EditProject(){
                                             <select name="Technology" id="" onChange={inputData} className={`form-control ${error.Technology ? "is-invalid" : ""}`}>
                                                 
                                                 {
-                                                    projectData.Technology ? (<option value={projectData.Technology}>{projectData.Technology}</option>)
+                                                    projectData.Technology ? (<option value={projectData.Technology}>{displayTech[projectData.Technology] ? displayTech[projectData.Technology].technology : "Select Technology"}</option>)
                                                     : (<option value="">Select Technology</option>)
                                                 }
                                                 {
@@ -349,10 +388,10 @@ function EditProject(){
                                             <label htmlFor="" className="my-2">Database</label>
                                             <select name="Database" id="" onChange={inputData} className={`form-control ${error.Database ? "is-invalid" : ""}`}>
 
-                                                
+                                        
                                                 {
                                                     projectData.Database ? (
-                                                    <option value={projectData.Database ? projectData.Database : ""}>{projectData.Database ? projectData.Database : "Select Database"}</option>
+                                                    <option value={projectData.Database ? projectData.Database : ""}>{displayDB[projectData.Database] ? displayDB[projectData.Database].database : "Select Database"}</option>
                                                 ) : (
                                                     <option value="">Select Database</option>
                                                 )

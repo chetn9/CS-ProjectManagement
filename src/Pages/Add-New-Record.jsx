@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { database } from "../Firebase/firebase-config";
-import { getDatabase, ref, onValue, push } from "firebase/database";
+import { getDatabase, ref, onValue, push, set } from "firebase/database";
+
+// import { auth } from 'firebase';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+
+
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import addImg from "../assets/icons/add_user_light_web_96.png";
 
 const MySwal = withReactContent(Swal)
+
+const auth = getAuth();
 
 function AddNewRecord() {
 
@@ -46,16 +54,24 @@ function AddNewRecord() {
     const submitForm = async (e) => {
         e.preventDefault();
 
-        const dataRef = ref(database, 'users');
-
-        if(formValidation())
+        if(userData.Role === "Admin")
         {
-            push(dataRef,{
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, userData.Email.trim(), userData.Password.trim());
+                console.log('User created:', userCredential.user);
+                const createdUser = userCredential.user;
+                alert('Signup successful!');
+
+                const dataRef = ref(database, 'users/'+createdUser.uid);
+
+                await set(dataRef,{
+                    // id: userCredential.user.uid,
                     FirstName: userData.FirstName.trim(),
                     LastName: userData.LastName.trim(),
                     Email: userData.Email.trim(),
                     Role: userData.Role,
                     Password: userData.Password.trim(),
+
             }).then(()=>{
 
                 // alert("Record added successfully!");
@@ -76,6 +92,90 @@ function AddNewRecord() {
             .catch((error)=>{
                 console.error("Error: ", error.message);
             });
+              } catch (err) {
+                console.error('Error signing up:', err);
+                setError(err.message);
+              }
+        }
+
+        if (userData.Role === "Faculty") 
+        {
+            try 
+            {
+                const userCredential = await createUserWithEmailAndPassword(auth, userData.Email.trim(), userData.Password.trim());
+                console.log('User created:', userCredential.user);
+                const createdUser = userCredential.user;
+                alert('Signup successful!');
+
+                await sendEmailVerification(createdUser);
+
+                const dataRef = ref(database, 'users/' + createdUser.uid);
+
+                await set(dataRef, {
+                    id: userCredential.user.uid,
+                    FirstName: userData.FirstName.trim(),
+                    LastName: userData.LastName.trim(),
+                    Email: userData.Email.trim(),
+                    Role: userData.Role,
+                    Password: userData.Password.trim(),
+                }).then(() => {
+
+                    // alert("Record added successfully!");
+                    MySwal.fire({
+                        title: "Record added successfully!",
+                        icon: "success",
+                        draggable: true
+                    });
+
+                    setUserData({
+                        FirstName: "",
+                        LastName: "",
+                        Email: "",
+                        Role: "",
+                        Password: "",
+                    });
+                })
+                    .catch((error) => {
+                        console.error("Error: ", error.message);
+                    });
+            } catch (err) {
+                console.error('Error signing up:', err);
+                setError(err.message);
+            }
+        }
+        
+        if(formValidation())
+        {
+            if(userData.Role === "Student")
+            {
+                const dataRef = ref(database, 'users');
+                push(dataRef,{
+                        FirstName: userData.FirstName.trim(),
+                        LastName: userData.LastName.trim(),
+                        Email: userData.Email.trim(),
+                        Role: userData.Role,
+                        Password: userData.Password.trim(),
+                }).then(()=>{
+    
+                    // alert("Record added successfully!");
+                    MySwal.fire({
+                        title: "Record added successfully!",
+                        icon: "success",
+                        draggable: true
+                    });
+    
+                    setUserData({
+                        FirstName: "",
+                        LastName: "",
+                        Email: "",
+                        Role: "",
+                        Password: "",
+                    });                
+                })
+                .catch((error)=>{
+                    console.error("Error: ", error.message);
+                });
+            }
         }
     }
 
@@ -84,10 +184,14 @@ function AddNewRecord() {
             <div className="container mt-3">
                 <div className="row justify-content-center">
                     <div className="col-lg-6">
-                        <div className="card">
-                            <div className="card-header">
-                                <h4 className="my-auto">Add New Record</h4>
+                        <div className="card overflow-hidden cardForRadius">
+                            <div className="card-header bg-white border-0 text-dark p-3">
+                                <div className="d-flex align-items-center projectCard">
+                                    <img src={addImg} style={{background: "#1e90ff"}} alt="" />
+                                    <h4 className="my-auto mx-3">Add New Record</h4>
+                                </div>
                             </div>
+                            
                             <div className="card-body">
                                 <form onSubmit={submitForm}>
 
@@ -122,6 +226,7 @@ function AddNewRecord() {
 
                                             <select name="Role" value={userData.Role} onChange={inputData}  className={`form-control ${error.Role ? "is-invalid" : ""}`}>
                                                 <option value="">Select Role</option>
+                                                <option value="Admin">Admin</option>
                                                 <option value="Faculty">Faculty</option>
                                                 <option value="Student">Student</option>
                                             </select>

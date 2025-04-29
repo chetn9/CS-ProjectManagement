@@ -17,28 +17,16 @@ import studentImg from "../assets/student_web_light_96.png";
 
 DataTable.use(DT);
 
-function StudentList() {
+function FacultyList() {
     // const data = ["Chetan", "Somaiya", "cs@gmail.com", "1"];
     
     const tableRef = useRef(null);
-    const [studentData, setStudentData] = useState([]);
-    const [studentStream, setStudentStream] = useState([]);
+    const [facultyData, setFacultyData] = useState([]);
     const MySwal = withReactContent(Swal);
     
-    // useEffect(() => {
-    //     axios.get("http://127.0.0.1:8000/api/Student-Data")
-    //     .then((response) => {
-    //         const studentArray = Object.values(response.data);
-    //         setStudentData(studentArray);
-    //         console.log(response.data);
-    //     }).catch((error)=>{
-    //         console.log(error);
-    //     });
-
-    // },[]);
 
     // Fatching all Records
-    const fetchStudentData = ()=>{
+    const fetchFacultyData = ()=>{
         const dataRef = ref(database, 'users');
 
         onValue(dataRef, (snapshot) => {
@@ -51,12 +39,12 @@ function StudentList() {
                     ...user,
                 }));
 
-                const studentData = usersArray.filter((user) => user.Role === "Student");
-                setStudentData(studentData);
+                const studentData = usersArray.filter((user) => user.Role === "Faculty");
+                setFacultyData(studentData);
             }
             else
             {
-                setStudentData([]);
+                setFacultyData([]);
             }
         }); 
         
@@ -65,34 +53,22 @@ function StudentList() {
         }
     }
 
-    // Fatching Student's Stream
-    useEffect(()=>{
-        const dataRef = ref(database, "streams");
-        
-        onValue(dataRef, (snapshot)=>{
-            const dataFromFirebase = snapshot.val();
-            setStudentStream(dataFromFirebase);
-        });
-    }, []);
 
-    // Unmount Student Data
+    // Unmount Faculty Data
     useEffect(()=>{
-        const data = fetchStudentData();
+        const data = fetchFacultyData();
 
         return ()=>{
-            setStudentData([]);
+            setFacultyData([]);
             data();
-            console.log("Unmount Student");
+            console.log("Unmount Faculty");
         }
     }, []);
 
-    useEffect(()=>{
-        console.log(studentStream);
-    })
 
     // DataTable
     useEffect(() => {
-        fetchStudentData();
+        fetchFacultyData();
 
         return () => {
             // Cleanup DataTable when the component is unmounted
@@ -104,13 +80,13 @@ function StudentList() {
 
     // Effect to handle when studentData changes
     useEffect(() => {
-        if (studentData.length > 0 && tableRef.current) {
+        if (facultyData.length > 0 && tableRef.current) {
             // Initialize DataTable only after studentData is loaded
             $(tableRef.current).DataTable({
                 destroy: true, // Ensure previous instance is destroyed
             });
         }
-    }, [studentData]);
+    }, [facultyData]);
 
     const deleteRecord = (id)=>{
         const dataRef = ref(database, 'users/'+id);
@@ -145,14 +121,14 @@ function StudentList() {
                         <div className="card-header border-0 bg-white p-3">
                             <div className="d-flex projectCard">
                                 <img src={studentImg} style={{background: "#1e90ff"}} alt="" />
-                                <h3 className="mx-3 fw-bold mt-2" style={{color: "#2f3542", letterSpacing: 0.5, fontFamily: "sans-serif"}}>Student Records</h3>
+                                <h3 className="mx-3 fw-bold mt-2" style={{color: "#2f3542", letterSpacing: 0.5, fontFamily: "sans-serif"}}>Faculty Records</h3>
                             </div>
                         </div>
 
                         <div className="card-body">
 
                             {
-                                studentData == 0 || studentData == null ? (
+                                facultyData == 0 || facultyData == null ? (
                                     <ShimmerLoader />
                             ): (
                                     <div className="table-responsive-sm">
@@ -164,15 +140,14 @@ function StudentList() {
                                                 <th className="text-center">First Name</th>
                                                 <th className="text-center">Last Name</th>
                                                 <th className="text-center">Email</th>
-                                                <th className="text-center">Stream</th>
-                                                <th className="text-center">Semester</th>
+                                            
                                                 <th className="text-center">Action</th>
                                             </tr>
                                         </thead>
 
                                         <tbody className="text-nowrap">
                                             {
-                                            studentData.map((user, index)=>(
+                                            facultyData.map((user, index)=>(
                                             
                                             
                                             <tr key={user.id}>
@@ -180,20 +155,10 @@ function StudentList() {
                                                 <td className="text-center">{user.FirstName}</td>
                                                 <td className="text-center">{user.LastName}</td>
                                                 <td className="text-center">{user.Email} </td>
-
-                                                {
-                                                    studentStream && studentStream[user.Stream] ? (
-                                                        <td className="text-center">{studentStream[user.Stream].stream}</td>
-                                                    ) : (
-                                                        <td className="text-center">--</td>
-                                                    )
-                                                }
-                                                {/* <td className="text-center">{user.Stream}</td> */}
-                                                <td className="text-center">{user.Semester}</td>
                                             
                                                 <td className="text-center">
-                                                <LinkButton to={`/Edit-Student/${user.id}`} className={"btn btn-outline-primary"} text={"Edit"}/>
-                                                <span className="mx-2">|</span> 
+                                                {/* <LinkButton to={`/Edit-Student/${user.id}`} className={"btn btn-outline-primary"} text={"Edit"}/> */}
+                                                {/* <span className="mx-2">|</span>  */}
                                                 <button type="submit" className="ml-3 btn btn-outline-danger" onClick={()=>deleteRecord(user.id)}> Delete <i className="bi bi-x-circle-fill"></i></button>
                                                 </td>
                                             </tr>
@@ -212,4 +177,4 @@ function StudentList() {
     );
 }
 
-export default StudentList;
+export default FacultyList;

@@ -11,63 +11,108 @@ import ProjectList from "../Pages/Student-Projects";
 import AddNewRecord from "../Pages/Add-New-Record";
 import EditProject from "../Pages/Edit-Project";
 import EditStudent from "../Pages/Students/Edit-Student";
+import FacultyList from "../Pages/Faculty-List";
 import Login from "../Pages/Login";
 import ManageTechDatabase from "../Pages/Tech-Database/ManageTech-Database";
 import ManageStream from "../Pages/Tech-Database/ManageStream";
 import ManageTask from "../Pages/Tasks/ManageTasks";
 import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import ProtectedRoute from "../Pages/Auth/ProtectedRoute";
+import SideBar from "./Sidebar";
+import Footer from "./Footer";
+import logo from "../assets/cs_app_round_logo.png";
+import ProfilePage from "../Pages/Profile-Page";
 
 function Header({isValid}) {
 
     const location = useLocation();
-    const navigate = useNavigate();
-    const auth = getAuth();
+
+    const userid = sessionStorage.getItem("user");
+    
+    const [sidebarActive, setSidebarActive] = useState(false);
+
+    // const toggleSidebar = () => {
+    //     setSidebarActive(!sidebarActive);
+    // };
 
     const [showBtn, setShowBtn] = useState(false);
 
     useEffect(()=>{
         setShowBtn(isValid);
-        
     }, [isValid])
 
-    // useEffect(()=>{
-    //     const userId = localStorage.getItem("userId");
-    //     if(userId)
-    //     {
-    //         setShowBtn(true);
-    //     }else
-    //     {
-    //         setShowBtn(false);
-    //     }
-    // }, []);
+    const [isSidebarActive, setIsSidebarActive] = useState(false);
 
-    
-
-    const logOutBtn = async ()=>{
-
-        // if(isUserValid)
-        // {
-        //     // return <Navigate to="/Login"/>
-        // }
-        await signOut(auth);
-        localStorage.removeItem("userId");
-        // setIsAuthenticated(false);
-        // useNavigate("/Login");
-        navigate("/Login");
-    }
+    const toggleSidebar = () => {
+        setIsSidebarActive(prevState => !prevState);
+        document.body.classList.toggle('toggle-sidebar'); // This mimics the original behavior
+    };
 
     return (
         <>
         {/* <Router basename="/">
         </Router> */}
             <div>
-                <Navbar expand="lg" className="bg-body-tertiary">
+            
+            {/* #16a085 */}
+                <Navbar expand="lg" className="fixed-top" style={{backgroundColor: "#3867d6", borderRadius: "10px", margin: "5px", height: "60px", position: "sticky"}}>
                         <Container>
-                            <Link className="nav-link navbar-brand" to="/">CS Project Management</Link>
-                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                            <Navbar.Collapse id="basic-navbar-nav mx-auto">
+                            
+                            {
+                                showBtn &&
+                                <i className="bi bi-list me-3 toggle-sidebar-btn text-light" onClick={toggleSidebar}></i>
+                            }
+                        
+                            <Link className="nav-link fw-bold me-lg-auto mx-lg-0 mx-auto navbar-brand text-light" to="/">CS Project Management</Link>
+                            {/* <Navbar.Toggle aria-controls="basic-navbar-nav" /> */}
+                            {/* <Navbar.Collapse id="basic-navbar-nav mx-auto">
                                 <Nav className="mx-auto">
+                                    <Link to="/" className="nav-link mx-2">Home</Link>
+                                    
+                                    <NavDropdown title="Manage Students" className="mx-2" id="basic-nav-dropdown">
+                                        
+                                        <NavDropdown.Item href="#action/3.2">
+                                            <Link to="/Student-List" className="nav-link">Student List</Link>
+                                        </NavDropdown.Item>
+                                        
+                                    </NavDropdown>
+
+                                    <NavDropdown title="Manage Faculty" className="mx-2" id="basic-nav-dropdown">
+                                    
+                                    </NavDropdown>
+
+                                    <Link to="/Project-List" className="nav-link mx-2">Project List</Link>
+
+                                    <Link to="/Add-New" className="nav-link mx-2">Add New Record</Link>
+
+                                    <Link to="/Manage-Stream" className="nav-link mx-2">Manage Stream</Link>
+                                    <Link to="/Manage-TechDatabase" className="nav-link">Manage Tech & Database</Link>
+                                    
+                                
+                                </Nav>
+                            </Navbar.Collapse> */}
+                        </Container>
+                </Navbar>
+
+                {/* <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                    <div className="container-fluid">
+                        <button className="btn btn-outline-light" onClick={toggleSidebar}>
+                            ☰
+                        </button>
+                        <a className="navbar-brand ms-3" href="#">
+                            My Website
+                        </a>
+                    </div>
+                </nav> */}
+
+                {
+                    userid &&
+                    <SideBar showBtn={showBtn}/>
+                }
+
+                {/* <div className={`sidebar ${sidebarActive ? 'active' : ''}`}>
+                    <ul>
+                    <Nav className="mx-auto">
                                     <Link to="/" className="nav-link mx-2">Home</Link>
                                     
                                     <NavDropdown title="Manage Students" className="mx-2" id="basic-nav-dropdown">
@@ -92,50 +137,31 @@ function Header({isValid}) {
                                         showBtn && 
                                         <button type="submit" onClick={logOutBtn} className="btn btn-danger btn-sm">Log Out</button>
                                     }
-                                
-                                </Nav>
-                            </Navbar.Collapse>
-                        </Container>
-                </Navbar>
-{/* 
-                <div class="sidebar">
-                    <h4 class="text-center">Sidebar</h4>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Logout</a>
-                        </li>
+                                    </Nav>
                     </ul>
                 </div> */}
 
                 <Routes>
                 
-                    <Route path="/Login" element={<Login />  } />
-                    <Route path="/" element={<ProtectedRoute/>}>
+                    <Route path="/Login" element={<Login />} />
+                    <Route path="/" element={<ProtectedRoute sidebarActive={sidebarActive} />}>
                 
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/Student-List" element={<StudentList /> } />
 
                         <Route path="/Add-New" element={<AddNewRecord />} />
+                        <Route path="/Faculty-List" element={<FacultyList />} />
                         <Route path="/Project-List" element={<ProjectList />} />
                         <Route path="/Project-Edit/:projectId" element={<EditProject />} />
                         <Route path="/Edit-Student/:studentId" element={<EditStudent /> } />
                     
-                    
                         <Route path="/Manage-Stream" element={<ManageStream />} />
                         <Route path="/Manage-TechDatabase" element={<ManageTechDatabase />} />
                         <Route path="/Task-List/:projectId" element={<ManageTask /> }/>
+                        <Route path="/Profile" element={<ProfilePage/>}/>
                     </Route>
                 </Routes>
-                
+
             </div>
                 
         </>

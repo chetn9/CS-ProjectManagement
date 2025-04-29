@@ -33,4 +33,61 @@
         left: 100%;
     }
 }
+
+/* Project details */
+.projectDetailShimmer {
+    position: relative;
+    overflow: hidden;
+    background: #f6f7f8;
+    background-image: linear-gradient(
+      to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 1000px 100%;
+    animation: pDetailsshimmer 1.5s infinite linear;
+    border-radius: 6px;
+  }
+  
+  @keyframes pDetailsshimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  
+
+/* Edit Page */
+
+.editShimmer {
+    position: relative;
+    overflow: hidden;
+    background: #f6f7f8;
+    background-image: linear-gradient(
+      to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 1000px 100%;
+    animation: editPageShimmer 1.5s infinite linear;
+    border-radius: 6px;
+  }
+  
+  @keyframes editPageShimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+  
   

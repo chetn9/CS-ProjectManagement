@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { database } from "../../Firebase/firebase-config";
-import { getDatabase, ref, onValue, remove, off } from "firebase/database";
+import { getDatabase, ref, push, onValue, remove, off } from "firebase/database";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -9,11 +9,16 @@ import LinkButton from "../../Components/UpdateLinkButton";
 
 import DataTable from 'datatables.net-react';
 import DT from 'datatables.net-bs5';
+import streamImg from "../../assets/icons/stream_light_web_96.png";
 
 
 function ManageStream()
 {
     const [techList, setTechList] = useState(null);
+    const [stream, setStream] = useState({
+        stream: "",
+    });
+
     const MySwal = withReactContent(Swal);
     DataTable.use(DT);
     
@@ -48,6 +53,50 @@ function ManageStream()
 
     }, []);
 
+    const inputData = (e)=>{
+        const {name, value} = e.target;
+
+        setStream((prevData)=>({
+            ...prevData,
+            [name]: value,
+        }));
+    }
+
+
+    const addStream = (e)=>{
+        e.preventDefault();
+
+        if(stream.stream === "" || stream.stream === null)
+        {
+            MySwal.fire({
+                title: "Enter Stream!",
+                icon: "warning",
+                draggable: true
+            });
+        }
+        else
+        {
+            const dataRef = ref(database, 'streams');
+            push(dataRef, {
+               stream: stream.stream.trim(),
+            }).then(() => {
+    
+                MySwal.fire({
+                    title: "Record added successfully!",
+                    icon: "success",
+                    draggable: true
+                });
+    
+                setStream({
+                    stream: "",
+                });
+            })
+            .catch((error) => {
+                console.error("Error: ", error.message);
+            });
+        }
+    }
+
     const deleteStream = (e)=>{
         const dataRef = ref(database, 'streams/'+e);
 
@@ -77,21 +126,22 @@ function ManageStream()
 
     return (
     <>
-        <div className="container mt-3">
+        <div className="container">
             <div className="row">
+                
                 <div className="col-lg-4">
-                    <div className="card">
+                    <div className="card overflow-hidden cardForRadius">
                         <div className="card-body">
-                            <form action="">
+                            <form method="POST">
                                 <div className="row form-group">
                                     <div className="col-lg-12">
                                         <label htmlFor="" className="mb-2">Enter Stream</label>
-                                        <input type="text" placeholder="Enter Stream" className="border border-info form-control" name="stream" id="" />
+                                        <input type="text" required onChange={inputData} value={stream.stream} placeholder="Enter Stream" className="border border-info form-control" name="stream" id="" />
                                     </div>
 
                                     <div className="col-lg-6">
                                        
-                                        <button type="submit" className="btn btn-primary mt-4">Add Stream</button>
+                                        <button type="submit" onClick={addStream} className="btn btn-primary mt-4">Add Stream</button>
                                     </div>
                                 </div>
                             </form>
@@ -102,9 +152,12 @@ function ManageStream()
                 <div className="col-lg-1"></div>
 
                 <div className="col-lg-7">
-                    <div className="card"> {/*#d6dcf9*/}
-                        <div className="card-header text-success" >
-                            <h4 className="my-auto">Stream Data</h4>
+                    <div className="card overflow-hidden cardForRadius"> {/*#d6dcf9*/}
+                        <div className="card-header bg-white border-0 text-dark p-3">
+                            <div className="d-flex align-items-center projectCard">
+                                <img src={streamImg} style={{background: "#1e90ff"}} alt="" />
+                                <h4 className="my-auto mx-3">Stream Data</h4>
+                            </div>
                         </div>
                         <div className="card-body">
                                 {
@@ -130,11 +183,11 @@ function ManageStream()
                                                             
                                                             <tr key={index}>
                                                                 <td className="text-center">{index+1}</td>
-                                                                <td className="text-center">{item.stream}</td>
-                                                                <td className="text-center">
+                                                                <td className="text-center text-nowrap">{item.stream}</td>
+                                                                <td className="text-center text-nowrap">
                                                                     <LinkButton text={"Edit"} />
                                                                     
-                                                                    <button onClick={()=>deleteStream(item.id)} className="mx-2 btn btn-outline-danger" type="submit">Delete</button>
+                                                                    <button onClick={()=>deleteStream(item.id)} className="mx-2 btn btn-outline-danger" type="submit">Delete <i className="bi bi-x-circle-fill"></i></button>
                                                                 </td>
                                                             </tr>
                                                         ))
